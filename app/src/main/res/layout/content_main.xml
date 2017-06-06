@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.thierry.archiverts.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+    <LinearLayout
+        android:layout_width="375dp"
+        android:layout_height="503dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+
+
+    <EditText
+        android:id="@+id/serverText"
+        android:layout_width="336dp"
+        android:layout_height="66dp"
+        android:paddingTop="20px"
+        android:text=""
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="6dp" />
+
+    <Button
+        android:id="@+id/GetServerData"
+        android:layout_width="340dp"
+        android:layout_height="84dp"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:cursorVisible="true"
+        android:paddingTop="10px"
+        android:text="Restful Webservice Call"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="55dp" />
+
+    <TextView
+        android:paddingTop="16px"
+        android:id="@+id/output"
+        android:layout_width="304dp"
+        android:layout_height="137dp"
+        android:text="Output : Click on button to get server data."
+        tools:layout_editor_absoluteY="55dp"
+        tools:layout_editor_absoluteX="64dp" />
+
+    <TextView
+
+        android:paddingTop="16px"
+        android:id="@+id/jsonParsed"
+        android:layout_width="0dp"
+        android:layout_height="495dp"
+        android:text="Parsed JSON."
+        tools:layout_editor_absoluteY="320dp"
+        tools:layout_editor_absoluteX="45dp" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
