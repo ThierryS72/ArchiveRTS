@@ -64,7 +64,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View arg0) {
                 // WebServer Request URL
-                String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
+                //String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
+                String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query=guerre&enumeratedFacets=mediaType&rows=5";
 
                 // Use AsyncTask execute Method To Prevent ANR Problem
                 new LongOperation().execute(serverURL);
@@ -239,7 +240,8 @@ public class MainActivity extends AppCompatActivity
                     jsonResponse = new JSONObject(Content);
                     /***** Returns the value mapped by name if it exists and is a JSONArray. ***/
                     /*******  Returns null otherwise.  *******/
-                    JSONArray jsonMainNode = jsonResponse.optJSONArray("Android");
+                    //JSONArray jsonMainNode = jsonResponse.optJSONArray("Android");
+                    JSONArray jsonMainNode = jsonResponse.optJSONArray("response");
                     /*********** Process each JSON Node ************/
                     int lengthJsonArr = jsonMainNode.length();
                     for(int i=0; i < lengthJsonArr; i++)
@@ -248,12 +250,13 @@ public class MainActivity extends AppCompatActivity
                         JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
 
                         /******* Fetch node values **********/
-                        String name = jsonChildNode.optString("name").toString();
-                        String number = jsonChildNode.optString("number").toString();
-                        String date_added = jsonChildNode.optString("date_added").toString();
+                        String numFound = jsonChildNode.optString("numFound").toString();
+                        //String program = jsonChildNode.optString("program").toString();
+                        //String title = jsonChildNode.optString("title").toString();
+                        //String date_added = jsonChildNode.optString("publicationDate").toString();
 
-
-                        OutputData += " Name           : "+ name +" " + "Number      : "+ number +" " + " Time : "+ date_added +" " +"-------------------------------------------------- ";
+                        OutputData += " numFound          : "+ numFound;
+                        //OutputData += " Nom de programme          : "+ program +" " + "Number      : "+ title +" " + " Time : "+ date_added +" " +"-------------------------------------------------- ";
                     }
                     /****************** End Parse Response JSON Data *************/
                     //Show Parsed Output on screen (activity)
