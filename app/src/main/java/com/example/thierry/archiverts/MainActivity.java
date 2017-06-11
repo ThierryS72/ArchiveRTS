@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,8 +22,10 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View arg0) {
                 // WebServer Request URL
                 //String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
-                String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query=guerre&enumeratedFacets=mediaType&rows=5";
+                String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query=guerre&enumeratedFacets=mediaType&rows=2";
 
                 // Use AsyncTask execute Method To Prevent ANR Problem
                 new LongOperation().execute(serverURL);
@@ -236,26 +239,35 @@ public class MainActivity extends AppCompatActivity
 
                 try {
 
+                    JSONObject json = (JSONObject) new JSONTokener(Content).nextValue();
+                    JSONObject json2 = json.getJSONObject("response");
+                    //String test1 = (String) json2.get("docs");
+                    String test2 = (String) json2.get("program");
+                    //String test3 = (String) json2.get("date_added");
+                    //Log.i("1:", "docs : " + test1 + ", program :" + test2);
+
                     /****** Creates a new JSONObject with name/value mappings from the JSON string. ********/
-                    jsonResponse = new JSONObject(Content);
+                    //jsonResponse = new JSONObject(Content);
                     /***** Returns the value mapped by name if it exists and is a JSONArray. ***/
                     /*******  Returns null otherwise.  *******/
                     //JSONArray jsonMainNode = jsonResponse.optJSONArray("Android");
-                    JSONArray jsonMainNode = jsonResponse.optJSONArray("response");
+                    JSONArray jsonMainNode = json2.optJSONArray("response");
                     /*********** Process each JSON Node ************/
+
                     int lengthJsonArr = jsonMainNode.length();
+
                     for(int i=0; i < lengthJsonArr; i++)
                     {
                         /****** Get Object for each JSON node.***********/
                         JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
 
                         /******* Fetch node values **********/
-                        String numFound = jsonChildNode.optString("numFound").toString();
-                        //String program = jsonChildNode.optString("program").toString();
-                        //String title = jsonChildNode.optString("title").toString();
-                        //String date_added = jsonChildNode.optString("publicationDate").toString();
+                        //String docs = jsonChildNode.optString("docs").toString();
+                        String program = jsonChildNode.optString("program").toString();
+                        String title = jsonChildNode.optString("title").toString();
+                        String date_added = jsonChildNode.optString("publicationDate").toString();
 
-                        OutputData += " numFound          : "+ numFound;
+                        OutputData += " program          : "+ program;
                         //OutputData += " Nom de programme          : "+ program +" " + "Number      : "+ title +" " + " Time : "+ date_added +" " +"-------------------------------------------------- ";
                     }
                     /****************** End Parse Response JSON Data *************/
@@ -266,7 +278,5 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
-
     }
-
 }
