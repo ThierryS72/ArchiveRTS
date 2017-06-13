@@ -33,6 +33,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View arg0) {
                 // WebServer Request URL
                 //String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
-                String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query=guerre&enumeratedFacets=mediaType&rows=2";
+                String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query=guerre&enumeratedFacets=mediaType&rows=5";
 
                 // Use AsyncTask execute Method To Prevent ANR Problem
                 new LongOperation().execute(serverURL);
@@ -240,35 +244,58 @@ public class MainActivity extends AppCompatActivity
                 try {
 
                     JSONObject json = (JSONObject) new JSONTokener(Content).nextValue();
-                    JSONObject json2 = json.getJSONObject("response");
-                    //String test1 = (String) json2.get("docs");
-                    String test2 = (String) json2.get("program");
-                    //String test3 = (String) json2.get("date_added");
-                    //Log.i("1:", "docs : " + test1 + ", program :" + test2);
+                    JSONObject json1 = json.getJSONObject("response");
+                    //JSONObject json3 = json.getJSONObject("0");
+                    int numFound = (Integer) json1.get("numFound");
+                    int start = (Integer) json1.get("start");
+                    JSONArray docs = json1.getJSONArray("docs");
 
-                    /****** Creates a new JSONObject with name/value mappings from the JSON string. ********/
-                    //jsonResponse = new JSONObject(Content);
-                    /***** Returns the value mapped by name if it exists and is a JSONArray. ***/
-                    /*******  Returns null otherwise.  *******/
-                    //JSONArray jsonMainNode = jsonResponse.optJSONArray("Android");
-                    JSONArray jsonMainNode = json2.optJSONArray("response");
-                    /*********** Process each JSON Node ************/
+                    Log.i("1:", "numFound : " + numFound +", start: " +start);
 
-                    int lengthJsonArr = jsonMainNode.length();
+                    int lengthJsonArr = docs.length();
+                    String program;
+                    String publicationDate;
+                    String title;
+                    String excerpt;
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                    Date date;
 
                     for(int i=0; i < lengthJsonArr; i++)
                     {
                         /****** Get Object for each JSON node.***********/
-                        JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+
 
                         /******* Fetch node values **********/
-                        //String docs = jsonChildNode.optString("docs").toString();
-                        String program = jsonChildNode.optString("program").toString();
-                        String title = jsonChildNode.optString("title").toString();
-                        String date_added = jsonChildNode.optString("publicationDate").toString();
+                        try {
+                            program = (String) (docs.getJSONObject(i).get("program"));
+                        }
+                        catch(Exception e)
+                        {
+                            program = "";
+                        }
+                        try{
+                            title = (String) (docs.getJSONObject(i).get("title"));
+                        }
+                        catch(Exception e)
+                        {
+                            title="";
+                        }
+                        try{
+                            publicationDate = (String) (docs.getJSONObject(i).get("publicationDate"));
+                            date = formatter.parse(publicationDate.replaceAll("Z$", "+0000"));
+                        }
+                        catch(Exception e){
+                            publicationDate = "";
+                        }
+                        try{
+                            excerpt = (String) (docs.getJSONObject(i).get("excerpt"));
+                        }
+                        catch(Exception e){
+                            excerpt = "";
+                        }
+                        Log.i(i +":", "titre d'émission:" + program + " titre: " + title + " Date de publication: " + publicationDate + "Résumé: " + excerpt );
 
                         OutputData += " program          : "+ program;
-                        //OutputData += " Nom de programme          : "+ program +" " + "Number      : "+ title +" " + " Time : "+ date_added +" " +"-------------------------------------------------- ";
                     }
                     /****************** End Parse Response JSON Data *************/
                     //Show Parsed Output on screen (activity)
