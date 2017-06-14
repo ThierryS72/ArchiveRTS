@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -145,6 +146,8 @@ public class MainActivity extends AppCompatActivity
         TextView jsonParsed = (TextView) findViewById(R.id.jsonParsed);
         int sizeData = 0;
         EditText serverText = (EditText) findViewById(R.id.serverText);
+        TextView titleText = (TextView) findViewById(R.id.textTitle);
+        ImageView imgArticle = (ImageView) findViewById(R.id.imageView2);
 
 
         protected void onPreExecute() {
@@ -242,7 +245,7 @@ public class MainActivity extends AppCompatActivity
                     JSONObject json = (JSONObject) new JSONTokener(Content).nextValue();
                     JSONObject json2 = json.getJSONObject("response");
                     //String test1 = (String) json2.get("docs");
-                    String test2 = (String) json2.get("program");
+                    // String test2 = (String) json2.get("program");
                     //String test3 = (String) json2.get("date_added");
                     //Log.i("1:", "docs : " + test1 + ", program :" + test2);
 
@@ -255,7 +258,7 @@ public class MainActivity extends AppCompatActivity
                     /*********** Process each JSON Node ************/
 
                     int lengthJsonArr = jsonMainNode.length();
-
+                    uiUpdate.setText( lengthJsonArr );
                     for(int i=0; i < lengthJsonArr; i++)
                     {
                         /****** Get Object for each JSON node.***********/
@@ -263,18 +266,23 @@ public class MainActivity extends AppCompatActivity
 
                         /******* Fetch node values **********/
                         //String docs = jsonChildNode.optString("docs").toString();
-                        String program = jsonChildNode.optString("program").toString();
+                        // String program = jsonChildNode.optString("program").toString();
                         String title = jsonChildNode.optString("title").toString();
                         String date_added = jsonChildNode.optString("publicationDate").toString();
 
-                        OutputData += " program          : "+ program;
+                        // OutputData += " program          : "+ program;
+                        OutputData += " titre          : "+ title;
+                        titleText.setText("Article Titre");
+                        //imgArticle.setImageURI("http://www.rts.ch/8691877.image?w=732&h=409");
                         //OutputData += " Nom de programme          : "+ program +" " + "Number      : "+ title +" " + " Time : "+ date_added +" " +"-------------------------------------------------- ";
                     }
                     /****************** End Parse Response JSON Data *************/
                     //Show Parsed Output on screen (activity)
                     jsonParsed.setText( OutputData );
+                    uiUpdate.setText( OutputData );
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    uiUpdate.setText( "erreur json : " + e.getMessage() );
                 }
             }
         }
