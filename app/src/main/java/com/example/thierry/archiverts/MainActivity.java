@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ListView mListView;
+    private List<Article> articles = loadArticle();
+    ArticleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +56,7 @@ public class MainActivity extends AppCompatActivity
 
         // ListView
         mListView = (ListView) findViewById(R.id.listView);
-        List<Article> articles = loadArticle();
-        ArticleAdapter adapter = new ArticleAdapter(MainActivity.this, articles);
+        adapter = new ArticleAdapter(MainActivity.this, articles);
         mListView.setAdapter(adapter);
 
 
@@ -96,9 +97,11 @@ public class MainActivity extends AppCompatActivity
     private List<Article> loadArticle()
     {
         List<Article> articles = new ArrayList<Article>();
+        /*
         articles.add(new Article("test", "program test", "Résumé test", new Date()));
         articles.add(new Article("test 2", "program test", "Résumé test", new Date()));
         articles.add(new Article("test 3", "program test", "Résumé test", new Date()));
+        */
         return articles;
     }
 
@@ -252,7 +255,7 @@ public class MainActivity extends AppCompatActivity
             // Close progress dialog
 
             // Liste d'article
-            List<Article> listArticles = new ArrayList<Article>();
+            //List<Article> listArticles = new ArrayList<Article>();
 
             Dialog.dismiss();
 
@@ -264,6 +267,7 @@ public class MainActivity extends AppCompatActivity
 
                 // Show Response Json On Screen (activity)
                 uiUpdate.setText( Content );
+
 
                 /****************** Start Parse Response JSON Data *************/
                 String OutputData = "";
@@ -327,8 +331,11 @@ public class MainActivity extends AppCompatActivity
                         OutputData += " program          : "+ program;
 
                         // add article to articleList
-                        listArticles.add(new Article(title,program,excerpt,date));
+                        articles.add(new Article(title,program,excerpt,date));
                     }
+                    // update ListView
+                    adapter.addAll(articles);
+                    adapter.notifyDataSetChanged();
                     /****************** End Parse Response JSON Data *************/
                     //Show Parsed Output on screen (activity)
                     jsonParsed.setText( OutputData );
