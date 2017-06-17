@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp" >
+
+    <ImageView
+        android:id="@+id/imageArticle"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        tools:background="#AAA" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/imageArticle"
+        android:layout_alignTop="@+id/imageArticle"
+        android:textStyle="bold"
+        tools:text="Pseudo" />
+
+    <TextView android:id="@+id/program"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_alignLeft="@+id/title"
+        android:layout_below="@+id/title"
+        tools:text="Programme" />
+
+    <TextView android:id="@+id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_alignLeft="@+id/program"
+        android:layout_below="@+id/program"
+        tools:text="Résumé de mon article" />
+
+    <TextView android:id="@+id/publicationDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_alignLeft="@+id/program"
+        android:layout_below="@+id/summary"
+        tools:text="01/01/1999" />
+
+</RelativeLayout>

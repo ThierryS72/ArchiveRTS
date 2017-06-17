@@ -15,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -35,16 +37,28 @@ import java.net.URLEncoder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // ListView
+        mListView = (ListView) findViewById(R.id.listView);
+        List<Article> articles = loadArticle();
+        ArticleAdapter adapter = new ArticleAdapter(MainActivity.this, articles);
+        mListView.setAdapter(adapter);
+
+
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -77,6 +91,15 @@ public class MainActivity extends AppCompatActivity
                 // Use AsyncTask execute Method To Prevent ANR Problem
                 new LongOperation().execute(serverURL);
             }});
+    }
+
+    private List<Article> loadArticle()
+    {
+        List<Article> articles = new ArrayList<Article>();
+        articles.add(new Article("test", "program test", "Résumé test", new Date()));
+        articles.add(new Article("test 2", "program test", "Résumé test", new Date()));
+        articles.add(new Article("test 3", "program test", "Résumé test", new Date()));
+        return articles;
     }
 
     @Override
@@ -223,9 +246,14 @@ public class MainActivity extends AppCompatActivity
             /*****************************************************/
             return null;
         }
+
         protected void onPostExecute(Void unused) {
             // NOTE: You can call UI Element here.
             // Close progress dialog
+
+            // Liste d'article
+            List<Article> listArticles = new ArrayList<Article>();
+
             Dialog.dismiss();
 
             if (Error != null) {
@@ -280,6 +308,7 @@ public class MainActivity extends AppCompatActivity
                         {
                             title="";
                         }
+                        date = new Date();
                         try{
                             publicationDate = (String) (docs.getJSONObject(i).get("publicationDate"));
                             date = formatter.parse(publicationDate.replaceAll("Z$", "+0000"));
@@ -296,6 +325,9 @@ public class MainActivity extends AppCompatActivity
                         Log.i(i +":", "titre d'émission:" + program + " titre: " + title + " Date de publication: " + publicationDate + "Résumé: " + excerpt );
 
                         OutputData += " program          : "+ program;
+
+                        // add article to articleList
+                        listArticles.add(new Article(title,program,excerpt,date));
                     }
                     /****************** End Parse Response JSON Data *************/
                     //Show Parsed Output on screen (activity)
