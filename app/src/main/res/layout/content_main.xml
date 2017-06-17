@@ -16,7 +16,7 @@
 
 
         <EditText
-            android:id="@+id/serverText"
+            android:id="@+id/searchString"
             android:layout_width="354dp"
             android:layout_height="66dp"
             android:paddingTop="20px"

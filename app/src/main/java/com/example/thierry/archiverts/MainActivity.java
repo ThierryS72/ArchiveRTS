@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private ListView mListView;
     private List<Article> articles = loadArticle();
     ArticleAdapter adapter;
+    private String searchStringQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +88,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View arg0) {
                 // WebServer Request URL
                 //String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
-                String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query=guerre&enumeratedFacets=mediaType&rows=5";
-
+                EditText searchString = (EditText) findViewById(R.id.searchString);
+                searchStringQuery = searchString.getText().toString();
+                String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=5";
+                Log.i("Search URL : ",serverURL);
+                Log.i("Search keyword : ",searchStringQuery);
                 // Use AsyncTask execute Method To Prevent ANR Problem
                 new LongOperation().execute(serverURL);
             }});
@@ -174,8 +178,7 @@ public class MainActivity extends AppCompatActivity
         TextView uiUpdate = (TextView) findViewById(R.id.output);
         TextView jsonParsed = (TextView) findViewById(R.id.jsonParsed);
         int sizeData = 0;
-        EditText serverText = (EditText) findViewById(R.id.serverText);
-
+        EditText searchString = (EditText) findViewById(R.id.searchString);
 
         protected void onPreExecute() {
             // NOTE: You can call UI Element here.
@@ -187,7 +190,8 @@ public class MainActivity extends AppCompatActivity
 
             try{
                 // Set Request parameter
-                data +="&" + URLEncoder.encode("data", "UTF-8") + "="+serverText.getText();
+                data +="&" + URLEncoder.encode("data", "UTF-8") + "="+searchString.getText();
+                searchStringQuery = searchString.getText().toString();
 
             } catch (UnsupportedEncodingException e) {
                 // TODO Auto-generated catch block
@@ -268,6 +272,8 @@ public class MainActivity extends AppCompatActivity
                 // Show Response Json On Screen (activity)
                 uiUpdate.setText( Content );
 
+                // Reset listArticles
+                articles = loadArticle();
 
                 /****************** Start Parse Response JSON Data *************/
                 String OutputData = "";
@@ -331,9 +337,12 @@ public class MainActivity extends AppCompatActivity
                         OutputData += " program          : "+ program;
 
                         // add article to articleList
+                        if(excerpt.length() > 100) excerpt = excerpt.substring(0,100);
                         articles.add(new Article(title,program,excerpt,date));
                     }
                     // update ListView
+                    //adapter.clear();
+                    mListView.destroyDrawingCache();
                     adapter.addAll(articles);
                     adapter.notifyDataSetChanged();
                     /****************** End Parse Response JSON Data *************/
