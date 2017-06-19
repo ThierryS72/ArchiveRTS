@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageArticle"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="600dp"
+        android:layout_height="200dp"
         tools:background="#AAA" />
 
     <TextView
@@ -18,33 +18,37 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/imageArticle"
-        android:layout_alignTop="@+id/imageArticle"
+        android:layout_marginTop="10dp"
+        android:layout_alignLeft="@+id/imageArticle"
+        android:layout_below="@+id/imageArticle"
         android:textStyle="bold"
-        tools:text="Pseudo" />
+        tools:text="Titre" />
 
     <TextView android:id="@+id/program"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:layout_alignLeft="@+id/title"
-        android:layout_below="@+id/title"
-        tools:text="Programme" />
+        tools:text="Programme"
+        android:layout_below="@+id/title" />
 
     <TextView android:id="@+id/summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
-        android:layout_alignLeft="@+id/program"
-        android:layout_below="@+id/program"
-        tools:text="Résumé de mon article" />
+        tools:text="Résumé de mon article"
+        android:layout_below="@+id/publicationDate"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/publicationDate" />
 
     <TextView android:id="@+id/publicationDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:layout_alignLeft="@+id/program"
-        android:layout_below="@+id/summary"
+        android:layout_below="@+id/program"
         tools:text="01/01/1999" />
 
 </RelativeLayout>
