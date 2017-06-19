@@ -25,7 +25,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.article_detail,parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.article_list,parent, false);
         }
 
         ArticleViewHolder viewHolder = (ArticleViewHolder) convertView.getTag();

@@ -1,6 +1,7 @@
 package com.example.thierry.archiverts;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,11 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import android.support.v7.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 
 
         setSupportActionBar(toolbar);
-
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -86,17 +90,40 @@ public class MainActivity extends AppCompatActivity
         GetServerData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                // WebServer Request URL
-                //String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
-                EditText searchString = (EditText) findViewById(R.id.searchString);
-                searchStringQuery = searchString.getText().toString();
-                String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=5";
-                Log.i("Search URL : ",serverURL);
-                Log.i("Search keyword : ",searchStringQuery);
-                // Use AsyncTask execute Method To Prevent ANR Problem
-                new LongOperation().execute(serverURL);
-            }});
+            // WebServer Request URL
+            //String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
+            EditText searchString = (EditText) findViewById(R.id.searchString);
+            searchStringQuery = searchString.getText().toString();
+            String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=5";
+            Log.i("Search URL : ",serverURL);
+            Log.i("Search keyword : ",searchStringQuery);
+            // Use AsyncTask execute Method To Prevent ANR Problem
+            new LongOperation().execute(serverURL);
+        }});
+
+        // Article detail activity when click on an item
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Log.i("ListView item","click" + position);
+                Intent myIntent = new Intent(view.getContext(), ArticleDetailActivity.class);
+                startActivityForResult(myIntent, position);
+            }
+        });
     }
+
+    /*
+    mListView.setOnItemClickListener(new OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> a,
+                View v, int position, long id) {
+            City city = (City) a.getItemAtPosition(position);
+            Intent intent = new Intent(v.getContext(), DetailsActivity.class);
+            intent.putExtra("com.example.cities.City", city);
+            startActivity(intent);
+        }
+    });
+    */
 
     private List<Article> loadArticle()
     {
@@ -253,6 +280,7 @@ public class MainActivity extends AppCompatActivity
             /*****************************************************/
             return null;
         }
+
 
         protected void onPostExecute(Void unused) {
             // NOTE: You can call UI Element here.

@@ -32,7 +32,7 @@
         android:clickable="true"
         android:cursorVisible="true"
         android:paddingTop="10px"
-        android:text="Restful Webservice Call"
+        android:text="Rechercher"
         android:visibility="visible"
         tools:layout_editor_absoluteX="28dp"
         tools:layout_editor_absoluteY="55dp" />
