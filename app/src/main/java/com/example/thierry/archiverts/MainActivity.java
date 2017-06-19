@@ -337,12 +337,12 @@ public class MainActivity extends AppCompatActivity
                         OutputData += " program          : "+ program;
 
                         // add article to articleList
-                        if(excerpt.length() > 100) excerpt = excerpt.substring(0,100);
+                        if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
                         articles.add(new Article(title,program,excerpt,date));
                     }
                     // update ListView
-                    //adapter.clear();
                     mListView.destroyDrawingCache();
+                    adapter.clear();
                     adapter.addAll(articles);
                     adapter.notifyDataSetChanged();
                     /****************** End Parse Response JSON Data *************/
