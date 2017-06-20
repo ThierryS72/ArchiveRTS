@@ -42,7 +42,6 @@
         android:layout_below="@+id/publicationDate"
         android:layout_marginTop="10dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/publicationDate" />
 
     <TextView android:id="@+id/publicationDate"
@@ -68,5 +67,13 @@
         tools:text="05:20"
         android:layout_above="@+id/mediaType"
         android:layout_alignParentEnd="true" />
+
+    <TextView android:id="@+id/articleUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_alignLeft="@+id/program"
+        android:layout_below="@+id/summary"
+        tools:text="http://url" />
 
 </RelativeLayout>

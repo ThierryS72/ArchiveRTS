@@ -16,9 +16,9 @@ public class Article implements Serializable  {
     private String program;
     private String summary;
     private Date publicationDate;
-    private URL imageURL;
+    private String imageURL;
     private int duration;
-    private URL articleURL;
+    private String articleURL;
     public enum mediaTypeEnum {
         audio,
         video,
@@ -28,7 +28,7 @@ public class Article implements Serializable  {
 
     SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
 
-    public Article(String title, String program, String summary, Date publicationDate, String mediaType, int duration)
+    public Article(String title, String program, String summary, Date publicationDate, String mediaType, int duration, String imageURL, String articleURL)
     {
         this.title = title;
         this.program = program;
@@ -36,44 +36,26 @@ public class Article implements Serializable  {
         this.publicationDate = publicationDate;
         this.mediaType = mediaTypeEnum.valueOf(mediaType);
         this.duration = duration;
-    }
-
-    public Article(String title, String program, String summary, Date publicationDate, URL imageURL, URL articleURL)
-    {
-        this.title = title;
-        this.program = program;
-        this.summary = summary;
-        this.publicationDate = publicationDate;
         this.imageURL = imageURL;
         this.articleURL = articleURL;
-    }
-
-    private Drawable LoadImageFromWebOperations() {
-        try {
-            InputStream is = (InputStream) this.imageURL.getContent();
-            Drawable d = Drawable.createFromStream(is, "RTS");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     // getters
     public String getTitle() {
         return this.title;
     }
-
     public String getProgram() {
         return this.program;
     }
-
     public String getSummary() {
         return this.summary;
     }
-
+    public String getImageUrl() {
+        return this.imageURL;
+    }
     public String getPublicationDate() { return dt1.format(this.publicationDate); }
-
     public String getMediaType() { return this.mediaType.name(); }
+    public String getArticleURL() { return  this.articleURL; }
 
     public String getDuration() {
         if(this.duration > 0)
@@ -121,7 +103,4 @@ public class Article implements Serializable  {
             return "";
         }
     }
-
-    public URL getImageURL() { return this.imageURL; }
-    public  URL getArticleURL() { return  this.articleURL; }
 }

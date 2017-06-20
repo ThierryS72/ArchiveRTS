@@ -18,12 +18,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import android.support.v7.app.AppCompatActivity;
 
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ListView mListView;
-    private List<Article> articles = loadArticle();
+    private List<Article> articles = resetArticles();
     ArticleAdapter adapter;
     private String searchStringQuery = "";
 
@@ -87,9 +92,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 */
-        final Button GetServerData = (Button) findViewById(R.id.GetServerData);
+        final Button BtnGetServerData = (Button) findViewById(R.id.GetServerData);
 
-        GetServerData.setOnClickListener(new View.OnClickListener() {
+
+        BtnGetServerData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
             getWindow().setSoftInputMode(
@@ -100,7 +106,8 @@ public class MainActivity extends AppCompatActivity
             EditText searchString = (EditText) findViewById(R.id.searchString);
             searchStringQuery = searchString.getText().toString();
             String apiKey = getString(R.string.apikey);
-            String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey="+apiKey+"&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=10";
+            String apiServerUrl = getString(R.string.api_url);
+            String serverURL = apiServerUrl+"?apikey="+apiKey+"&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=100&sort=-score%2C-isDuplicate%2C-publicationDate";
             Log.i("Search URL : ",serverURL);
             Log.i("Search keyword : ",searchStringQuery);
             // Use AsyncTask execute Method To Prevent ANR Problem
@@ -119,14 +126,36 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private List<Article> loadArticle()
+    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
+        ImageView imageView;
+
+        public DownloadImageFromInternet(ImageView imageView) {
+            this.imageView = imageView;
+            Toast.makeText(getApplicationContext(), "Please wait, it may take a few minute...", Toast.LENGTH_SHORT).show();
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String imageURL = urls[0];
+            Bitmap bimage = null;
+            try {
+                InputStream in = new java.net.URL(imageURL).openStream();
+                bimage = BitmapFactory.decodeStream(in);
+
+            } catch (Exception e) {
+                Log.e("Error Message", e.getMessage());
+                e.printStackTrace();
+            }
+            return bimage;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
+    }
+
+    private List<Article> resetArticles()
     {
         List<Article> articles = new ArrayList<Article>();
-        /*
-        articles.add(new Article("test", "program test", "Résumé test", new Date()));
-        articles.add(new Article("test 2", "program test", "Résumé test", new Date()));
-        articles.add(new Article("test 3", "program test", "Résumé test", new Date()));
-        */
         return articles;
     }
 
@@ -206,7 +235,7 @@ public class MainActivity extends AppCompatActivity
 
             //Start Progress Dialog (Message)
 
-            Dialog.setMessage("Please wait..");
+            Dialog.setMessage("Patientez...");
             Dialog.show();
 
             try{
@@ -288,6 +317,7 @@ public class MainActivity extends AppCompatActivity
             if (Error != null) {
 
                 uiUpdate.setText("Output : "+Error);
+                Toast.makeText(getApplicationContext(), "Une erreur est survenue..", Toast.LENGTH_SHORT).show();
 
             } else {
 
@@ -295,7 +325,7 @@ public class MainActivity extends AppCompatActivity
                 uiUpdate.setText( Content );
 
                 // Reset listArticles
-                articles = loadArticle();
+                articles = resetArticles();
 
                 /****************** Start Parse Response JSON Data *************/
                 String OutputData = "";
@@ -318,6 +348,8 @@ public class MainActivity extends AppCompatActivity
                     String title;
                     String excerpt;
                     String mediaType;
+                    String imageURL;
+                    String articleURL;
                     int duration;
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
                     Date date;
@@ -341,6 +373,20 @@ public class MainActivity extends AppCompatActivity
                         catch(Exception e)
                         {
                             title="";
+                        }
+                        try{
+                            imageURL = (String) (docs.getJSONObject(i).get("imageURL"));
+                        }
+                        catch(Exception e)
+                        {
+                            imageURL="";
+                        }
+                        try{
+                            articleURL = (String) (docs.getJSONObject(i).get("mediaURL"));
+                        }
+                        catch(Exception e)
+                        {
+                            articleURL="";
                         }
                         date = new Date();
                         try{
@@ -376,7 +422,7 @@ public class MainActivity extends AppCompatActivity
 
                         // add article to articleList
                         // if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
-                        articles.add(new Article(title,program,excerpt,date,mediaType, duration));
+                        articles.add(new Article(title,program,excerpt,date,mediaType, duration, imageURL, articleURL));
                     }
                     // update ListView
                     mListView.destroyDrawingCache();

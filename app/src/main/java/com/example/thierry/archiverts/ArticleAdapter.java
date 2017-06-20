@@ -1,6 +1,8 @@
 package com.example.thierry.archiverts;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,13 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         viewHolder.program.setText(article.getProgram());
         viewHolder.date.setText(article.getPublicationDate());
         //viewHolder.avatar.setImageDrawable(new ColorDrawable(article.getColor()));
+
+        // background color for even / unpair
+        if (position == 0) {
+            //convertView.setBackgroundResource()
+        } else if (position == 1) {
+            //convertView.setBackgroundResource(ColorDrawable-)
+        }
 
         return convertView;
     }
