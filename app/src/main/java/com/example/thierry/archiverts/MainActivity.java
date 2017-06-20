@@ -317,6 +317,8 @@ public class MainActivity extends AppCompatActivity
                     String publicationDate;
                     String title;
                     String excerpt;
+                    String mediaType;
+                    int duration;
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
                     Date date;
 
@@ -354,13 +356,27 @@ public class MainActivity extends AppCompatActivity
                         catch(Exception e){
                             excerpt = "";
                         }
+                        try {
+                            mediaType = (String) (docs.getJSONObject(i).get("mediaType"));
+                        }
+                        catch(Exception e)
+                        {
+                            mediaType = "";
+                        }
+                        try {
+                            duration = (int) (docs.getJSONObject(i).get("durationSec"));
+                        }
+                        catch(Exception e)
+                        {
+                            duration = 0;
+                        }
                         Log.i(i +":", "titre d'émission:" + program + " titre: " + title + " Date de publication: " + publicationDate + "Résumé: " + excerpt );
 
                         OutputData += " program          : "+ program;
 
                         // add article to articleList
                         // if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
-                        articles.add(new Article(title,program,excerpt,date));
+                        articles.add(new Article(title,program,excerpt,date,mediaType, duration));
                     }
                     // update ListView
                     mListView.destroyDrawingCache();

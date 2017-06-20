@@ -53,4 +53,20 @@
         android:layout_below="@+id/program"
         tools:text="01/01/1999" />
 
+    <TextView android:id="@+id/mediaType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        tools:text="mediaType"
+        android:layout_above="@+id/summary"
+        android:layout_alignParentEnd="true" />
+
+    <TextView android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        tools:text="05:20"
+        android:layout_above="@+id/mediaType"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>
