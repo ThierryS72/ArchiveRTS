@@ -1,6 +1,7 @@
 package com.example.thierry.archiverts;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,15 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         viewHolder.title.setText(article.getTitle());
         viewHolder.summary.setText(article.getSummary());
         viewHolder.program.setText(article.getProgram());
+        //viewHolder.imageArticle.setImageURI(Uri.parse(article.getImageURL()));
+
+        if (article.getImageURL() != "") {
+            new ImageDownloaderTask(viewHolder.imageArticle).execute(article.getImageURL());
+        }
+        /*
+        Uri newUri  = Uri.parse((article.getPicture().toString()));
+        viewHolder.imageArticle.setImageURI(newUri);
+        */
         viewHolder.date.setText(article.getPublicationDate());
         //viewHolder.avatar.setImageDrawable(new ColorDrawable(article.getColor()));
 

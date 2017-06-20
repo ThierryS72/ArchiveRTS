@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -316,6 +317,8 @@ public class MainActivity extends AppCompatActivity
                     String program;
                     String publicationDate;
                     String title;
+                    String imageURL;
+                    String mediaURL;
                     String excerpt;
                     String mediaType;
                     int duration;
@@ -351,6 +354,20 @@ public class MainActivity extends AppCompatActivity
                             publicationDate = "";
                         }
                         try{
+                            imageURL = (String) (docs.getJSONObject(i).get("imageURL"));
+                        }
+                        catch(Exception e)
+                        {
+                            imageURL = "";
+                        }
+                        try{
+                            mediaURL = (String) (docs.getJSONObject(i).get("mediaURL"));
+                        }
+                        catch(Exception e)
+                        {
+                            mediaURL = "";
+                        }
+                        try{
                             excerpt = (String) (docs.getJSONObject(i).get("excerpt"));
                         }
                         catch(Exception e){
@@ -371,12 +388,13 @@ public class MainActivity extends AppCompatActivity
                             duration = 0;
                         }
                         Log.i(i +":", "titre d'émission:" + program + " titre: " + title + " Date de publication: " + publicationDate + "Résumé: " + excerpt );
+                        Log.i(i +":", "image URL:" + imageURL + " media URL: " + mediaURL );
 
                         OutputData += " program          : "+ program;
 
                         // add article to articleList
                         // if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
-                        articles.add(new Article(title,program,excerpt,date,mediaType, duration));
+                        articles.add(new Article(title,program,excerpt,date,mediaType,duration,imageURL,mediaURL));
                     }
                     // update ListView
                     mListView.destroyDrawingCache();
