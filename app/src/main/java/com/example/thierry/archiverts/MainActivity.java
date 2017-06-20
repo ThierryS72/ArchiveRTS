@@ -2,7 +2,7 @@ package com.example.thierry.archiverts;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,7 +37,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
-
+/*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -86,17 +86,21 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+*/
         final Button GetServerData = (Button) findViewById(R.id.GetServerData);
 
         GetServerData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+            );
             // WebServer Request URL
             //String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
             EditText searchString = (EditText) findViewById(R.id.searchString);
             searchStringQuery = searchString.getText().toString();
-            String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=5";
+            String apiKey = getString(R.string.apikey);
+            String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey="+apiKey+"&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=10";
             Log.i("Search URL : ",serverURL);
             Log.i("Search keyword : ",searchStringQuery);
             // Use AsyncTask execute Method To Prevent ANR Problem
@@ -109,23 +113,11 @@ public class MainActivity extends AppCompatActivity
                                     int position, long id) {
                 Log.i("ListView item","click" + position);
                 Intent myIntent = new Intent(view.getContext(), ArticleDetailActivity.class);
+                myIntent.putExtra("article", articles.get(position));
                 startActivityForResult(myIntent, position);
             }
         });
     }
-
-    /*
-    mListView.setOnItemClickListener(new OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> a,
-                View v, int position, long id) {
-            City city = (City) a.getItemAtPosition(position);
-            Intent intent = new Intent(v.getContext(), DetailsActivity.class);
-            intent.putExtra("com.example.cities.City", city);
-            startActivity(intent);
-        }
-    });
-    */
 
     private List<Article> loadArticle()
     {
@@ -324,11 +316,9 @@ public class MainActivity extends AppCompatActivity
                     String program;
                     String publicationDate;
                     String title;
-                    String imageURL;
-                    URI image;
-                    String mediaURL;
-                    URI media;
                     String excerpt;
+                    String mediaType;
+                    int duration;
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
                     Date date;
 
@@ -361,37 +351,32 @@ public class MainActivity extends AppCompatActivity
                             publicationDate = "";
                         }
                         try{
-                            //imageURL = (String) (docs.getJSONObject(i).get("imageURL"));
-                            imageURL = (String) "http://iceclearmedia.com/wp-content/uploads/2011/04/SEO-and-url-Shorteners.jpg";
-                            //image = new URL(imageURL);
-                            image = URI.create(imageURL);
-                        }
-                        catch(Exception e)
-                        {
-                            image = null;
-                        }
-                        try{
-                            mediaURL = (String) (docs.getJSONObject(i).get("mediaURL"));
-                            media = URI.create(mediaURL);
-                        }
-                        catch(Exception e)
-                        {
-                            media = null;
-                        }
-                        try{
                             excerpt = (String) (docs.getJSONObject(i).get("excerpt"));
                         }
                         catch(Exception e){
                             excerpt = "";
                         }
+                        try {
+                            mediaType = (String) (docs.getJSONObject(i).get("mediaType"));
+                        }
+                        catch(Exception e)
+                        {
+                            mediaType = "";
+                        }
+                        try {
+                            duration = (int) (docs.getJSONObject(i).get("durationSec"));
+                        }
+                        catch(Exception e)
+                        {
+                            duration = 0;
+                        }
                         Log.i(i +":", "titre d'émission:" + program + " titre: " + title + " Date de publication: " + publicationDate + "Résumé: " + excerpt );
-                        Log.i(i +":", "image URL:" + image + " media URL: " + media );
 
                         OutputData += " program          : "+ program;
 
                         // add article to articleList
-                        if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
-                        articles.add(new Article(title,program,excerpt,date,image,media));
+                        // if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
+                        articles.add(new Article(title,program,excerpt,date,mediaType, duration));
                     }
                     // update ListView
                     mListView.destroyDrawingCache();

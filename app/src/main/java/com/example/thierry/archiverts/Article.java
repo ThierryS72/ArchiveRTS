@@ -1,32 +1,44 @@
 package com.example.thierry.archiverts;
-
-import android.net.Uri;
-
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.io.InputStream;
+import android.graphics.drawable.Drawable;
 
 /**
  * Created by wengerol on 16.06.2017.
  */
 
-public class Article {
+public class Article implements Serializable  {
     private String title;
     private String program;
     private String summary;
     private Date publicationDate;
-    private URI imageURL;
-    private URI articleURL;
+    private URL imageURL;
+    private int duration;
+    private URL articleURL;
+    public enum mediaTypeEnum {
+        audio,
+        video,
+        article
+    }
+    private mediaTypeEnum mediaType;
 
-    public Article(String title, String program, String summary, Date publicationDate)
+    SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
+
+    public Article(String title, String program, String summary, Date publicationDate, String mediaType, int duration)
     {
         this.title = title;
         this.program = program;
         this.summary = summary;
         this.publicationDate = publicationDate;
+        this.mediaType = mediaTypeEnum.valueOf(mediaType);
+        this.duration = duration;
     }
 
-    public Article(String title, String program, String summary, Date publicationDate, URI imageURL, URI articleURL)
+    public Article(String title, String program, String summary, Date publicationDate, URL imageURL, URL articleURL)
     {
         this.title = title;
         this.program = program;
@@ -36,6 +48,17 @@ public class Article {
         this.articleURL = articleURL;
     }
 
+    private Drawable LoadImageFromWebOperations() {
+        try {
+            InputStream is = (InputStream) this.imageURL.getContent();
+            Drawable d = Drawable.createFromStream(is, "RTS");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // getters
     public String getTitle() {
         return this.title;
     }
@@ -48,5 +71,57 @@ public class Article {
         return this.summary;
     }
 
-    public URI getPicture() { return this.imageURL; }
+    public String getPublicationDate() { return dt1.format(this.publicationDate); }
+
+    public String getMediaType() { return this.mediaType.name(); }
+
+    public String getDuration() {
+        if(this.duration > 0)
+        {
+            int h = 0;
+            int m = 0;
+            int s = 0;
+            int solde = this.duration;
+            String res = "";
+
+            if (solde > 3600)
+            {
+                h = this.duration / 3600;
+                solde %= 3600;
+                res = h+"h";
+            }
+            if (solde > 60)
+            {
+                m = solde / 60;
+                solde %= 60;
+                if (m < 10)
+                {
+                    res += "0" + m + "m";
+                }
+                else
+                {
+                    res += m + "m";
+                }
+            }
+            if (solde > 0)
+            {
+                s = solde;
+                if (s < 10)
+                {
+                    res += "0" + s + "s";
+                }
+                else
+                {
+                    res += s + "s";
+                }
+            }
+            return res;
+        }
+        else {
+            return "";
+        }
+    }
+
+    public URL getImageURL() { return this.imageURL; }
+    public  URL getArticleURL() { return  this.articleURL; }
 }
