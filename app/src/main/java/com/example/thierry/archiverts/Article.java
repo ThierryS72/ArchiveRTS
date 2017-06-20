@@ -16,8 +16,9 @@ public class Article implements Serializable  {
     private String program;
     private String summary;
     private Date publicationDate;
-    private String imageURL;
     private int duration;
+    private String imageURL;
+    private URL imageURL2;
     private String articleURL;
     public enum mediaTypeEnum {
         audio,
@@ -38,6 +39,22 @@ public class Article implements Serializable  {
         this.duration = duration;
         this.imageURL = imageURL;
         this.articleURL = articleURL;
+
+    }
+
+    private Drawable LoadImageFromWebOperations() {
+        if (this.imageURL != "") {
+            try {
+                imageURL2 = new URL(this.imageURL);
+                InputStream is = (InputStream) this.imageURL2.getContent();
+                Drawable d = Drawable.createFromStream(is, "RTS");
+                return d;
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        else
+        { return null; }
     }
 
     // getters
@@ -55,7 +72,6 @@ public class Article implements Serializable  {
     }
     public String getPublicationDate() { return dt1.format(this.publicationDate); }
     public String getMediaType() { return this.mediaType.name(); }
-    public String getArticleURL() { return  this.articleURL; }
 
     public String getDuration() {
         if(this.duration > 0)
@@ -103,4 +119,6 @@ public class Article implements Serializable  {
             return "";
         }
     }
+    public String getImageURL() { return this.imageURL; }
+    public String getArticleURL() { return  this.articleURL; }
 }
