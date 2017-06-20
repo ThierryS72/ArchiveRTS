@@ -2,6 +2,7 @@ package com.example.thierry.archiverts;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
-
+/*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -84,17 +86,21 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+*/
         final Button GetServerData = (Button) findViewById(R.id.GetServerData);
 
         GetServerData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+            );
             // WebServer Request URL
             //String serverURL = "http://androidexample.com/media/webservice/JsonReturn.php";
             EditText searchString = (EditText) findViewById(R.id.searchString);
             searchStringQuery = searchString.getText().toString();
-            String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey=A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=5";
+            String apiKey = getString(R.string.apikey);
+            String serverURL = "http://srgssr-prod.apigee.net/rts-archives-public-api/archives?apikey="+apiKey+"&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=10";
             Log.i("Search URL : ",serverURL);
             Log.i("Search keyword : ",searchStringQuery);
             // Use AsyncTask execute Method To Prevent ANR Problem

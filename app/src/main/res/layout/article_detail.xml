@@ -29,6 +29,8 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:layout_alignLeft="@+id/title"
+        android:onClick="onClick"
+        android:clickable="true"
         tools:text="Programme"
         android:layout_below="@+id/title" />
 

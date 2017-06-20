@@ -3,7 +3,9 @@ package com.example.thierry.archiverts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
+import android.view.View;
 
 import org.w3c.dom.Text;
 
@@ -30,5 +32,13 @@ public class ArticleDetailActivity extends AppCompatActivity {
         txtTitle.setText(a.getTitle());
         txtSummary.setText(a.getSummary());
         txtDate.setText(a.getPublicationDate().toString());
+
+        // onClick program -> load a new search
+        txtProg.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View arg0) {
+                Log.i("click","program");
+            }
+        });
     }
 }
