@@ -2,6 +2,7 @@ package com.example.thierry.archiverts;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +36,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -322,6 +324,10 @@ public class MainActivity extends AppCompatActivity
                     String program;
                     String publicationDate;
                     String title;
+                    String imageURL;
+                    URI image;
+                    String mediaURL;
+                    URI media;
                     String excerpt;
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
                     Date date;
@@ -355,18 +361,37 @@ public class MainActivity extends AppCompatActivity
                             publicationDate = "";
                         }
                         try{
+                            //imageURL = (String) (docs.getJSONObject(i).get("imageURL"));
+                            imageURL = (String) "http://iceclearmedia.com/wp-content/uploads/2011/04/SEO-and-url-Shorteners.jpg";
+                            //image = new URL(imageURL);
+                            image = URI.create(imageURL);
+                        }
+                        catch(Exception e)
+                        {
+                            image = null;
+                        }
+                        try{
+                            mediaURL = (String) (docs.getJSONObject(i).get("mediaURL"));
+                            media = URI.create(mediaURL);
+                        }
+                        catch(Exception e)
+                        {
+                            media = null;
+                        }
+                        try{
                             excerpt = (String) (docs.getJSONObject(i).get("excerpt"));
                         }
                         catch(Exception e){
                             excerpt = "";
                         }
                         Log.i(i +":", "titre d'émission:" + program + " titre: " + title + " Date de publication: " + publicationDate + "Résumé: " + excerpt );
+                        Log.i(i +":", "image URL:" + image + " media URL: " + media );
 
                         OutputData += " program          : "+ program;
 
                         // add article to articleList
                         if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
-                        articles.add(new Article(title,program,excerpt,date));
+                        articles.add(new Article(title,program,excerpt,date,image,media));
                     }
                     // update ListView
                     mListView.destroyDrawingCache();

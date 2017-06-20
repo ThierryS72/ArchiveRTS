@@ -1,6 +1,7 @@
 package com.example.thierry.archiverts;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,15 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         viewHolder.title.setText(article.getTitle());
         viewHolder.summary.setText(article.getSummary());
         viewHolder.program.setText(article.getProgram());
+        viewHolder.imageArticle.setImageURI(Uri.parse(article.getPicture().toString()));
+        if (viewHolder.imageArticle != null) {
+            //new ImageDownloaderTask(viewHolder.imageArticle).execute("http://iceclearmedia.com/wp-content/uploads/2011/04/SEO-and-url-Shorteners.jpg");
+            new ImageDownloaderTask(viewHolder.imageArticle).execute(article.getPicture().toString());
+        }
+        /*
+        Uri newUri  = Uri.parse((article.getPicture().toString()));
+        viewHolder.imageArticle.setImageURI(newUri);
+        */
         //viewHolder.avatar.setImageDrawable(new ColorDrawable(article.getColor()));
 
         return convertView;

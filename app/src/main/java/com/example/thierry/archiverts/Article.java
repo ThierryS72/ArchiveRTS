@@ -1,6 +1,9 @@
 package com.example.thierry.archiverts;
 
+import android.net.Uri;
+
 import java.net.URI;
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -44,4 +47,6 @@ public class Article {
     public String getSummary() {
         return this.summary;
     }
+
+    public URI getPicture() { return this.imageURL; }
 }
