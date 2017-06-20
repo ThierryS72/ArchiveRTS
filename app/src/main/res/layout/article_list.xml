@@ -35,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
+        android:maxLength="100"
         android:layout_alignLeft="@+id/program"
         android:layout_below="@+id/program"
         tools:text="Résumé de mon article" />
@@ -43,8 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
-        android:layout_alignLeft="@+id/program"
-        android:layout_below="@+id/summary"
-        tools:text="01/01/1999" />
+        tools:text="01/01/1999"
+        android:layout_above="@+id/summary"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

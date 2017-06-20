@@ -20,8 +20,9 @@
             android:layout_width="354dp"
             android:layout_height="66dp"
             android:paddingTop="20px"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:text=""
-            tools:layout_editor_absoluteX="28dp"
             tools:layout_editor_absoluteY="6dp" />
 
         <Button

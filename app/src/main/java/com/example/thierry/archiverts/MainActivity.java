@@ -107,23 +107,11 @@ public class MainActivity extends AppCompatActivity
                                     int position, long id) {
                 Log.i("ListView item","click" + position);
                 Intent myIntent = new Intent(view.getContext(), ArticleDetailActivity.class);
+                myIntent.putExtra("article", articles.get(position));
                 startActivityForResult(myIntent, position);
             }
         });
     }
-
-    /*
-    mListView.setOnItemClickListener(new OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> a,
-                View v, int position, long id) {
-            City city = (City) a.getItemAtPosition(position);
-            Intent intent = new Intent(v.getContext(), DetailsActivity.class);
-            intent.putExtra("com.example.cities.City", city);
-            startActivity(intent);
-        }
-    });
-    */
 
     private List<Article> loadArticle()
     {
@@ -365,7 +353,7 @@ public class MainActivity extends AppCompatActivity
                         OutputData += " program          : "+ program;
 
                         // add article to articleList
-                        if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
+                        // if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
                         articles.add(new Article(title,program,excerpt,date));
                     }
                     // update ListView

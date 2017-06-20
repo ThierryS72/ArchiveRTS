@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -34,6 +36,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             viewHolder.title = (TextView) convertView.findViewById(R.id.title);
             viewHolder.summary = (TextView) convertView.findViewById(R.id.summary);
             viewHolder.program = (TextView) convertView.findViewById(R.id.program);
+            viewHolder.date = (TextView) convertView.findViewById(R.id.publicationDate);
             viewHolder.imageArticle = (ImageView) convertView.findViewById(R.id.imageArticle);
             convertView.setTag(viewHolder);
         }
@@ -45,6 +48,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         viewHolder.title.setText(article.getTitle());
         viewHolder.summary.setText(article.getSummary());
         viewHolder.program.setText(article.getProgram());
+        viewHolder.date.setText(article.getPublicationDate());
         //viewHolder.avatar.setImageDrawable(new ColorDrawable(article.getColor()));
 
         return convertView;
@@ -54,6 +58,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         public TextView title;
         public TextView summary;
         public TextView program;
+        public TextView date;
         public ImageView imageArticle;
     }
 }

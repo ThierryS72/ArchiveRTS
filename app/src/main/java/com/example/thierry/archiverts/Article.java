@@ -1,19 +1,21 @@
 package com.example.thierry.archiverts;
-
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by wengerol on 16.06.2017.
  */
 
-public class Article {
+public class Article implements Serializable  {
     private String title;
     private String program;
     private String summary;
     private Date publicationDate;
     private URI imageURL;
     private URI articleURL;
+    SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
 
     public Article(String title, String program, String summary, Date publicationDate)
     {
@@ -44,4 +46,6 @@ public class Article {
     public String getSummary() {
         return this.summary;
     }
+
+    public String getPublicationDate() { return dt1.format(this.publicationDate); }
 }
