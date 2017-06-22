@@ -54,7 +54,12 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         //viewHolder.imageArticle.setImageURI(Uri.parse(article.getImageURL()));
 
         if (article.getImageURL() != "") {
+            viewHolder.imageArticle.setVisibility(View.VISIBLE);
             new ImageDownloaderTask(viewHolder.imageArticle).execute(article.getImageURL());
+        }
+        else  // If there isn't a picture, hide the empty space with GONE
+        {
+            viewHolder.imageArticle.setVisibility(View.GONE);
         }
         /*
         Uri newUri  = Uri.parse((article.getPicture().toString()));

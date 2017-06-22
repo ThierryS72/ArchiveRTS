@@ -70,6 +70,11 @@
         tools:layout_editor_absoluteY="320dp"
         tools:layout_editor_absoluteX="45dp" />
 
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/piechart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
