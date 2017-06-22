@@ -1,6 +1,8 @@
 package com.example.thierry.archiverts;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -20,7 +22,6 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -30,28 +31,19 @@ import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import android.support.v7.app.AppCompatActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,18 +52,22 @@ public class MainActivity extends AppCompatActivity
     private List<Article> articles = resetArticles();
     ArticleAdapter adapter;
     private String searchStringQuery = "";
+    private static Context mContext;
+
+    public static Context getContext() {
+        return mContext;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        mContext = this;
         // ListView
         mListView = (ListView) findViewById(R.id.listView);
         adapter = new ArticleAdapter(MainActivity.this, articles);
         mListView.setAdapter(adapter);
-
 
         setSupportActionBar(toolbar);
         /*
@@ -94,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 */
         final Button BtnGetServerData = (Button) findViewById(R.id.GetServerData);
-
+        final Context c = this.getApplicationContext();
 
         BtnGetServerData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +107,8 @@ public class MainActivity extends AppCompatActivity
             String serverURL = apiServerUrl+"?apikey="+apiKey+"&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=100&sort=-score%2C-isDuplicate%2C-publicationDate";
             Log.i("Search URL : ",serverURL);
             Log.i("Search keyword : ",searchStringQuery);
-            // Use AsyncTask execute Method To Prevent ANR Problem
+            Tools t = new Tools();
+            t.apiQuery(c, apiServerUrl, apiKey, searchStringQuery, 3, 0, "-score%2C-isDuplicate%2C-publicationDate", "mediaType");
             new LongOperation().execute(serverURL);
         }});
 
@@ -325,133 +322,13 @@ public class MainActivity extends AppCompatActivity
                 // Show Response Json On Screen (activity)
                 uiUpdate.setText( Content );
 
-                // Reset listArticles
-                articles = resetArticles();
+                articles = Tools.responseApiJSONtoListArticles(Content);
 
-                /****************** Start Parse Response JSON Data *************/
-                String OutputData = "";
-                JSONObject jsonResponse;
-
-                try {
-
-                    JSONObject json = (JSONObject) new JSONTokener(Content).nextValue();
-                    JSONObject json1 = json.getJSONObject("response");
-                    //JSONObject json3 = json.getJSONObject("0");
-                    int numFound = (Integer) json1.get("numFound");
-                    int start = (Integer) json1.get("start");
-                    JSONArray docs = json1.getJSONArray("docs");
-
-                    Log.i("1:", "numFound : " + numFound +", start: " +start);
-
-                    int lengthJsonArr = docs.length();
-                    String program;
-                    String publicationDate;
-                    String title;
-                    String imageURL;
-                    String mediaURL;
-                    String excerpt;
-                    String mediaType;
-                    String articleURL;
-                    int duration;
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-                    Date date;
-
-                    for(int i=0; i < lengthJsonArr; i++)
-                    {
-                        /****** Get Object for each JSON node.***********/
-
-
-                        /******* Fetch node values **********/
-                        try {
-                            program = (String) (docs.getJSONObject(i).get("program"));
-                        }
-                        catch(Exception e)
-                        {
-                            program = "";
-                        }
-                        try{
-                            title = (String) (docs.getJSONObject(i).get("title"));
-                        }
-                        catch(Exception e)
-                        {
-                            title="";
-                        }
-                        try{
-                            imageURL = (String) (docs.getJSONObject(i).get("imageURL"));
-                        }
-                        catch(Exception e)
-                        {
-                            imageURL="";
-                        }
-                        try{
-                            articleURL = (String) (docs.getJSONObject(i).get("mediaURL"));
-                        }
-                        catch(Exception e)
-                        {
-                            articleURL="";
-                        }
-                        date = new Date();
-                        try{
-                            publicationDate = (String) (docs.getJSONObject(i).get("publicationDate"));
-                            date = formatter.parse(publicationDate.replaceAll("Z$", "+0000"));
-                        }
-                        catch(Exception e){
-                            publicationDate = "";
-                        }
-                        try{
-                            imageURL = (String) (docs.getJSONObject(i).get("imageURL"));
-                        }
-                        catch(Exception e)
-                        {
-                            imageURL = "";
-                        }
-                        try{
-                            mediaURL = (String) (docs.getJSONObject(i).get("mediaURL"));
-                        }
-                        catch(Exception e)
-                        {
-                            mediaURL = "";
-                        }
-                        try{
-                            excerpt = (String) (docs.getJSONObject(i).get("excerpt"));
-                        }
-                        catch(Exception e){
-                            excerpt = "";
-                        }
-                        try {
-                            mediaType = (String) (docs.getJSONObject(i).get("mediaType"));
-                        }
-                        catch(Exception e)
-                        {
-                            mediaType = "";
-                        }
-                        try {
-                            duration = (int) (docs.getJSONObject(i).get("durationSec"));
-                        }
-                        catch(Exception e)
-                        {
-                            duration = 0;
-                        }
-                        Log.i(i +":", "titre d'émission:" + program + " titre: " + title + " Date de publication: " + publicationDate + "Résumé: " + excerpt );
-                        Log.i(i +":", "image URL:" + imageURL + " media URL: " + mediaURL );
-
-                        OutputData += " program          : "+ program;
-
-                        // add article to articleList
-                        // if(excerpt.length() > 100) excerpt = excerpt.substring(0,100) + "...";
-                        articles.add(new Article(title,program,excerpt,date,mediaType,duration,imageURL,mediaURL));
-                    }
-                    // update ListView
-                    mListView.destroyDrawingCache();
-                    adapter.clear();
-                    adapter.addAll(articles);
-                    adapter.notifyDataSetChanged();
-                    /****************** End Parse Response JSON Data *************/
-                    //Show Parsed Output on screen (activity)
-                    jsonParsed.setText( OutputData );
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                // update ListView
+                mListView.destroyDrawingCache();
+                adapter.clear();
+                adapter.addAll(articles);
+                adapter.notifyDataSetChanged();
             }
         }
     }
