@@ -30,4 +30,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile files('libs/MPAndroidChart-v3.0.1.jar')
     testCompile 'junit:junit:4.12'
+    compile files('libs/okhttp-3.8.1.jar')
+    compile files('libs/okio-1.13.0.jar')
 }

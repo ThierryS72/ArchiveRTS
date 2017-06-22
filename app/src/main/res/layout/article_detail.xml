@@ -5,75 +5,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp" >
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/imageArticle"
-        android:layout_width="600dp"
-        android:layout_height="200dp"
-        tools:background="#AAA" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignLeft="@+id/imageArticle"
-        android:layout_below="@+id/imageArticle"
-        android:textStyle="bold"
-        tools:text="Titre" />
+                <ImageView
+            android:id="@+id/imageArticle"
+            android:layout_width="600dp"
+            android:layout_height="200dp"
+            tools:background="#AAA" />
 
-    <TextView android:id="@+id/program"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:layout_alignLeft="@+id/title"
-        android:onClick="onClick"
-        android:clickable="true"
-        tools:text="Programme"
-        android:layout_below="@+id/title" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_alignLeft="@+id/imageArticle"
+                android:layout_below="@+id/imageArticle"
+                android:textStyle="bold"
+                tools:text="Titre" />
 
-    <TextView android:id="@+id/summary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        tools:text="Résumé de mon article"
-        android:layout_below="@+id/publicationDate"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/publicationDate" />
+            <TextView android:id="@+id/program"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:layout_alignLeft="@+id/title"
+                android:onClick="onClick"
+                android:clickable="true"
+                tools:text="Programme"
+                android:layout_below="@+id/title" />
 
-    <TextView android:id="@+id/publicationDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:layout_alignLeft="@+id/program"
-        android:layout_below="@+id/program"
-        tools:text="01/01/1999" />
+            <TextView android:id="@+id/summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                tools:text="Résumé de mon article"
+                android:layout_below="@+id/publicationDate"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignStart="@+id/publicationDate" />
 
-    <TextView android:id="@+id/mediaType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        tools:text="mediaType"
-        android:layout_above="@+id/summary"
-        android:layout_alignParentEnd="true" />
+            <TextView android:id="@+id/publicationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:layout_alignLeft="@+id/program"
+                android:layout_below="@+id/program"
+                tools:text="01/01/1999" />
 
-    <TextView android:id="@+id/duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        tools:text="05:20"
-        android:layout_above="@+id/mediaType"
-        android:layout_alignParentEnd="true" />
+            <TextView android:id="@+id/mediaType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                tools:text="mediaType"
+                android:layout_above="@+id/summary"
+                android:layout_alignParentEnd="true" />
 
-    <TextView android:id="@+id/articleUrl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:layout_alignLeft="@+id/program"
-        android:layout_below="@+id/summary"
-        tools:text="http://url" />
+            <TextView android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                tools:text="05:20"
+                android:layout_above="@+id/mediaType"
+                android:layout_alignParentEnd="true" />
 
+            <TextView android:id="@+id/articleUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:layout_alignLeft="@+id/program"
+                android:layout_below="@+id/summary"
+                tools:text="http://url" />
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
