@@ -29,40 +29,7 @@ import okhttp3.Response;
 public final class Tools extends Activity {
     private Context context;
 
-    public void apiQuery(Context c, String apiServerUrl, String apiKey, String searchString, int nbRows, int start, String sort, String searchFacets)
-    {
-        this.context = c;
-        try {
-            OkHttpClient httpClient = new OkHttpClient();
-            String serverURL = apiServerUrl+"?apikey="+apiKey+"&query="+searchString+"&enumeratedFacets="+searchFacets+"&rows="+nbRows+"&sort="+sort;
-            Request getRequestApi = new Request.Builder()
-                    .url(serverURL)
-                    .build();
-
-            httpClient.newCall(getRequestApi).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if(!response.isSuccessful())
-                    {
-                        throw new IOException("Unexpected code "+response);
-                    }
-                    String jsonGet = response.body().string();
-                    Log.i("okHttp",jsonGet);
-                    responseApiJSONtoListArticles(jsonGet);
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            Log.i("okhttp exception",e.getMessage());
-        }
-    }
-
+    // parse the JSON repsonse of API to create object Article
     public static ArrayList<Article> responseApiJSONtoListArticles(String response)
     {
         // Reset listArticles
@@ -76,7 +43,6 @@ public final class Tools extends Activity {
 
             JSONObject json = (JSONObject) new JSONTokener(response).nextValue();
             JSONObject json1 = json.getJSONObject("response");
-            //JSONObject json3 = json.getJSONObject("0");
             int numFound = (Integer) json1.get("numFound");
             int start = (Integer) json1.get("start");
             JSONArray docs = json1.getJSONArray("docs");
@@ -148,26 +114,6 @@ public final class Tools extends Activity {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-
-        try {
-            //ListView mListView;
-            //int resListViewId = context.getResources().getIdentifier("listView", "id", getPackageName());
-            /*
-            ListView mListView = (ListView) ((Activity) context).findViewById(R.id.listView);
-            // mListView = (ListView) findViewById(resListViewId);
-            ArticleAdapter adapter = new ArticleAdapter(context, articles);
-            mListView.setAdapter(adapter);
-
-            mListView.destroyDrawingCache();
-            adapter.clear();
-            adapter.addAll(articles);
-            adapter.notifyDataSetChanged();
-            */
-        }
-        catch(Exception ex)
-        {
-            ex.getMessage();
         }
         return articles;
     }

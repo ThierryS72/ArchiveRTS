@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     private ListView mListView;
     private List<Article> articles = resetArticles();
     ArticleAdapter adapter;
+
     private String searchStringQuery = "";
     private static Context mContext;
 
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mContext = this;
         // ListView
+
         mListView = (ListView) findViewById(R.id.listView);
         adapter = new ArticleAdapter(MainActivity.this, articles);
         mListView.setAdapter(adapter);
@@ -107,9 +109,19 @@ public class MainActivity extends AppCompatActivity
             String serverURL = apiServerUrl+"?apikey="+apiKey+"&query="+searchStringQuery+"&enumeratedFacets=mediaType&rows=100&sort=-score%2C-isDuplicate%2C-publicationDate";
             Log.i("Search URL : ",serverURL);
             Log.i("Search keyword : ",searchStringQuery);
-            Tools t = new Tools();
-            t.apiQuery(c, apiServerUrl, apiKey, searchStringQuery, 3, 0, "-score%2C-isDuplicate%2C-publicationDate", "mediaType");
-            new LongOperation().execute(serverURL);
+            // Intent for API activity
+            Intent myIntent = new Intent(mListView.getContext(), ApiActivity.class);
+            myIntent.putExtra("searchString", searchStringQuery);
+            myIntent.putExtra("sort", "-score%2C-isDuplicate%2C-publicationDate");
+            myIntent.putExtra("enumFacets", "mediaType,program");
+            myIntent.putExtra("nbRows", 10);
+            myIntent.putExtra("start", 0);
+            try {
+                startActivityForResult(myIntent, 0);
+            }catch (Exception e)
+            {
+                e.getMessage();
+            }
         }});
 
         // Article detail activity when click on an item
@@ -122,6 +134,19 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(myIntent, position);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && data != null) {
+            String res = data.getStringExtra("response");
+            Log.i("return intent",res);
+            articles = Tools.responseApiJSONtoListArticles(res);
+
+            mListView = (ListView) findViewById(R.id.listView);
+            adapter = new ArticleAdapter(this, articles);
+            mListView.setAdapter(adapter);
+        }
     }
 
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
@@ -212,124 +237,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private class LongOperation extends AsyncTask<String, Void, Void> {
-
-        // Required initialization
-
-        //private final HttpClient Client = new DefaultHttpClient();
-        private String Content;
-        private String Error = null;
-        private ProgressDialog Dialog = new ProgressDialog(MainActivity.this);
-        String data ="";
-        TextView uiUpdate = (TextView) findViewById(R.id.output);
-        TextView jsonParsed = (TextView) findViewById(R.id.jsonParsed);
-        int sizeData = 0;
-        EditText searchString = (EditText) findViewById(R.id.searchString);
-
-        protected void onPreExecute() {
-            // NOTE: You can call UI Element here.
-
-            //Start Progress Dialog (Message)
-
-            Dialog.setMessage("Patientez...");
-            Dialog.show();
-
-            try{
-                // Set Request parameter
-                data +="&" + URLEncoder.encode("data", "UTF-8") + "="+searchString.getText();
-                searchStringQuery = searchString.getText().toString();
-
-            } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-        }
-
-        // Call after onPreExecute method
-        protected Void doInBackground(String... urls) {
-
-            /************ Make Post Call To Web Server ***********/
-            BufferedReader reader=null;
-
-            // Send data
-            try
-            {
-
-                // Defined URL  where to send data
-                URL url = new URL(urls[0]);
-
-                // Send POST data request
-
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write( data );
-                wr.flush();
-
-                // Get the server response
-
-                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-
-                // Read Server Response
-                while((line = reader.readLine()) != null)
-                {
-                    // Append server response in string
-                    sb.append(line + " ");
-                }
-
-                // Append Server Response To Content String
-                Content = sb.toString();
-            }
-            catch(Exception ex)
-            {
-                Error = ex.getMessage();
-            }
-            finally
-            {
-                try
-                {
-                    reader.close();
-                }
-                catch(Exception ex) {}
-            }
-
-            /*****************************************************/
-            return null;
-        }
-
-
-        protected void onPostExecute(Void unused) {
-            // NOTE: You can call UI Element here.
-            // Close progress dialog
-
-            // Liste d'article
-            //List<Article> listArticles = new ArrayList<Article>();
-
-            Dialog.dismiss();
-
-            if (Error != null) {
-
-                uiUpdate.setText("Output : "+Error);
-                Toast.makeText(getApplicationContext(), "Une erreur est survenue..", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                // Show Response Json On Screen (activity)
-                uiUpdate.setText( Content );
-
-                articles = Tools.responseApiJSONtoListArticles(Content);
-
-                // update ListView
-                mListView.destroyDrawingCache();
-                adapter.clear();
-                adapter.addAll(articles);
-                adapter.notifyDataSetChanged();
-            }
-        }
     }
 }
