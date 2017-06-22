@@ -29,7 +29,8 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChartActivity">
+        <activity android:name=".ChartActivity"
+            android:theme="@style/AppTheme.NoActionBar"><!-- ADD THIS LINE -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

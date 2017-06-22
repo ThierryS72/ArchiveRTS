@@ -1,9 +1,13 @@
 package com.example.thierry.archiverts;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -22,39 +26,46 @@ import java.util.ArrayList;
  * Created by Thierry on 22.06.2017.
  */
 
-public class ChartActivity extends AppCompatActivity implements OnChartValueSelectedListener {
+public class ChartActivity extends MainActivity implements OnChartValueSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        setContentView(R.layout.pie_chart);
+
+        // Get the facette
+        Intent i = getIntent();
+        Article a = (Article)i.getSerializableExtra("article");
+
         PieChart pieChart = (PieChart) findViewById(R.id.piechart);
         pieChart.setUsePercentValues(true);
-
         // IMPORTANT: In a PieChart, no values (Entry) should have the same
         // xIndex (even if from different DataSets), since no values can be
         // drawn above each other.
         //ArrayList<Entry> yvalues = new ArrayList<Entry>();
         ArrayList<PieEntry> yvalues = new ArrayList<PieEntry>();
-        yvalues.add(new PieEntry(8f, 0));
-        yvalues.add(new PieEntry(15f, 1));
-        yvalues.add(new PieEntry(12f, 2));
-        yvalues.add(new PieEntry(25f, 3));
-        yvalues.add(new PieEntry(23f, 4));
-        yvalues.add(new PieEntry(17f, 5));
-
-        //PieDataSet dataSet = new PieDataSet(yvalues, "Election Results");
-        PieDataSet dataSet = new PieDataSet(yvalues, "Election Results");
-
         ArrayList<String> xVals = new ArrayList<String>();
 
+        int lengthFacette = 10;
+
+        for(int j=0; j < lengthFacette; j++)
+        {
+            yvalues.add(new PieEntry(j+1, j));
+            xVals.add("January");
+        }
+
+        //PieDataSet dataSet = new PieDataSet(yvalues, "Election Results");
+        PieDataSet dataSet = new PieDataSet(yvalues, "Facettes Result");
+        /*
+        ArrayList<String> xVals = new ArrayList<String>();
         xVals.add("January");
         xVals.add("February");
         xVals.add("March");
         xVals.add("April");
         xVals.add("May");
         xVals.add("June");
-
+        */
         //PieData data = new PieData(xVals, dataSet);
         PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter());
@@ -84,12 +95,17 @@ public class ChartActivity extends AppCompatActivity implements OnChartValueSele
                         + ", DataSet index: " + dataSetIndex);
     }
 
+
     @Override
     public void onValueSelected(Entry entry, Highlight highlight) {
 
+        if (entry == null)
+            return;
+        Log.i("VAL SELECTED",
+                "Value: " + entry.getY() + ", xIndex: " + entry.getX());
     }
 
-    @Override
+    //@Override
     public void onNothingSelected() {
         Log.i("PieChart", "nothing selected");
     }
