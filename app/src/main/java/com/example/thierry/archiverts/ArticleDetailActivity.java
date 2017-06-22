@@ -1,5 +1,6 @@
 package com.example.thierry.archiverts;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,8 +35,9 @@ public class ArticleDetailActivity extends AppCompatActivity {
         // Get the article
         Intent i = getIntent();
         Article a = (Article)i.getSerializableExtra("article");
+        final String keyword = (String)i.getStringExtra("keyword");
 
-        TextView txtProg = (TextView) findViewById(R.id.program);
+        final TextView txtProg = (TextView) findViewById(R.id.program);
         TextView txtTitle = (TextView) findViewById(R.id.title);
         TextView txtSummary = (TextView) findViewById(R.id.summary);
         TextView txtDate = (TextView) findViewById(R.id.publicationDate);
@@ -75,7 +77,15 @@ public class ArticleDetailActivity extends AppCompatActivity {
         txtProg.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View arg0) {
+
                 Log.i("click","program");
+                // An intent is used to return values (response string from API)
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("program", txtProg.getText());
+                resultIntent.putExtra("keyword", keyword);
+                setResult(Activity.RESULT_OK, resultIntent);
+                // finish the activity
+                finish();
             }
         });
 

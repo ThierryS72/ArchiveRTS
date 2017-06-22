@@ -44,6 +44,7 @@ public class ApiActivity extends AppCompatActivity {
         String searchString = (String)i.getStringExtra("searchString");
         String sort = (String)i.getStringExtra("sort");
         String enumFacets = (String)i.getStringExtra("enumFacets");
+        Log.i("api call",searchString);
         int nbRows = (int)i.getIntExtra("nbRows", 0);
 
         try {

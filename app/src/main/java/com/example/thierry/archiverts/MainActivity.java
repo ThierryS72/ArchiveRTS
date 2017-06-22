@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity
             myIntent.putExtra("searchString", searchStringQuery);
             myIntent.putExtra("sort", "-score%2C-isDuplicate%2C-publicationDate");
             myIntent.putExtra("enumFacets", "mediaType,program");
-            myIntent.putExtra("nbRows", 10);
+            myIntent.putExtra("nbRows", 25);
             myIntent.putExtra("start", 0);
             try {
                 startActivityForResult(myIntent, 200); // 200 is used for responseCode
@@ -131,14 +131,33 @@ public class MainActivity extends AppCompatActivity
                 Log.i("ListView item","click" + position);
                 Intent myIntent = new Intent(view.getContext(), ArticleDetailActivity.class);
                 myIntent.putExtra("article", articles.get(position));
-                startActivity(myIntent);
+                myIntent.putExtra("keyword", searchStringQuery);
+                startActivityForResult(myIntent, 100); // 100 used for responseCode
             }
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // 200 means activity apiCall
+        // 100 means activity articleDetail
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            String keyword = data.getStringExtra("keyword");
+            String program = data.getStringExtra("program");
+            // Start a new search for this emission
+            Intent myIntent = new Intent(mListView.getContext(), ApiActivity.class);
+            myIntent.putExtra("searchString", "program:"+program+" AND "+keyword);
+            myIntent.putExtra("sort", "-score%2C-isDuplicate%2C-publicationDate");
+            myIntent.putExtra("enumFacets", "mediaType,program");
+            myIntent.putExtra("nbRows", 25);
+            myIntent.putExtra("start", 0);
+            try {
+                startActivityForResult(myIntent, 200); // 200 is used for responseCode
+            }catch (Exception e)
+            {
+                e.getMessage();
+            }
+        }
+        // 200 means activity articleDetail
         if (requestCode == 200 && resultCode == RESULT_OK && data != null) {
             String res = data.getStringExtra("response");
             Log.i("return intent",res);
