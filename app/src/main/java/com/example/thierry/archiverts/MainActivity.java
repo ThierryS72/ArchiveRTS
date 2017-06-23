@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
 
     private ListView mListView;
     private List<Article> articles = resetArticles();
-    private List<Facette> facettes = resetFacettes();
+    private Array facettes;
 
     ArticleAdapter adapter;
 
@@ -219,12 +219,6 @@ public class MainActivity extends AppCompatActivity
     {
         List<Article> articles = new ArrayList<Article>();
         return articles;
-    }
-
-    private List<Facette> resetFacettess()
-    {
-        List<Facette> factettes = new ArrayList<Facette>();
-        return facettes;
     }
 
     @Override

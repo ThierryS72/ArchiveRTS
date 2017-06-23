@@ -12,10 +12,13 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -120,10 +123,10 @@ public final class Tools extends Activity {
     }
 
     // parse the JSON repsonse of API to create ArrayList Facette
-    public static ArrayList<Facette> responseApiJSONtoListFacettes(String response)
+    public static Array responseApiJSONtoListFacettes(String response)
     {
         // Reset listFacettes
-        ArrayList<Facette> facettes = new ArrayList<Facette>();
+        Array facettes;
 
         /****************** Start Parse Response JSON Data *************/
         String OutputData = "";
@@ -139,10 +142,21 @@ public final class Tools extends Activity {
             Iterator<String> itr = json2.keys();
             int i=0;
             String[] values = new String[json2.length()];
+
+            // Convert array to list
+            List<String> listFromArray = Arrays.asList(values);
+            // Create new list, because, List to Array always returns a fixed-size list backed by the specified array.
+            List<String> tempList = new ArrayList<String>(listFromArray);
+
             while(itr.hasNext()){
-                //values[i++] = json2.getString((String)itr.next());
-                facettes.add(new Facette(json2.getString((String)itr.next())));
+                values[i++] = json2.getString((String)itr.next());
+                tempList.add(values[i++]);
+                //cettes.add(new Facette(json2.getString((String)itr.next()));
             }
+            //Convert list back to array
+            String[] tempArray = new String[tempList.size()];
+            facettes = tempList.toArray(tempArray);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
