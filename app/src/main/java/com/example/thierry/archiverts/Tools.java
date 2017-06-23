@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -116,5 +117,35 @@ public final class Tools extends Activity {
             e.printStackTrace();
         }
         return articles;
+    }
+
+    // parse the JSON repsonse of API to create ArrayList Facette
+    public static ArrayList<Facette> responseApiJSONtoListFacettes(String response)
+    {
+        // Reset listFacettes
+        ArrayList<Facette> facettes = new ArrayList<Facette>();
+
+        /****************** Start Parse Response JSON Data *************/
+        String OutputData = "";
+        JSONObject jsonResponse;
+
+        try {
+
+            JSONObject json = (JSONObject) new JSONTokener(response).nextValue();
+            //JSONObject json1 = json.getJSONObject("facetCounts");
+            JSONObject json2 = json.getJSONObject("program");
+
+
+            Iterator<String> itr = json2.keys();
+            int i=0;
+            String[] values = new String[json2.length()];
+            while(itr.hasNext()){
+                //values[i++] = json2.getString((String)itr.next());
+                facettes.add(new Facette(json2.getString((String)itr.next())));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return facettes;
     }
 }

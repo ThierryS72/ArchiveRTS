@@ -36,7 +36,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
 
         // Get the facette
         Intent i = getIntent();
-        Article a = (Article)i.getSerializableExtra("article");
+        Facette a = (Facette)i.getSerializableExtra("facette");
 
         PieChart pieChart = (PieChart) findViewById(R.id.piechart);
         pieChart.setUsePercentValues(true);
@@ -47,11 +47,11 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         ArrayList<PieEntry> yvalues = new ArrayList<PieEntry>();
         ArrayList<String> xVals = new ArrayList<String>();
 
-        int lengthFacette = 10;
+        int lengthFacette = a.length();
 
         for(int j=0; j < lengthFacette; j++)
         {
-            yvalues.add(new PieEntry(j+1, j));
+            yvalues.add(new PieEntry(j, j));
             xVals.add("January");
         }
 

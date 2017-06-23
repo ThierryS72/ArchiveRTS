@@ -7,4 +7,7 @@
     <string name="action_settings">Settings</string>
     <string name="apikey">A3WvxPEzWhvtttBVmFEY3EyskkwWGGRi</string>
     <string name="api_url">http://srgssr-prod.apigee.net/rts-archives-public-api/archives</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
