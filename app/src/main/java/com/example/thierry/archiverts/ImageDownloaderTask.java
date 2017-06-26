@@ -35,16 +35,20 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
             bitmap = null;
         }
 
-        if (imageViewReference != null) {
-            ImageView imageView = imageViewReference.get();
-            if (imageView != null) {
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                } else {
-                    Drawable imageArticle = imageView.getContext().getResources().getDrawable(+R.id.imageArticle);
-                    imageView.setImageDrawable(imageArticle);
+        try {
+            if (imageViewReference != null) {
+                ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    if (bitmap != null) {
+                        imageView.setImageBitmap(bitmap);
+                    } else {
+                        Drawable imageArticle = imageView.getContext().getResources().getDrawable(+R.id.imageArticle);
+                        imageView.setImageDrawable(imageArticle);
+                    }
                 }
             }
+        } catch (Exception e){
+            Log.w("ImageDownloader", "No image");
         }
     }
 

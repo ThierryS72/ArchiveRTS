@@ -13,6 +13,7 @@ import android.widget.SeekBar;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -75,7 +76,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         int j = 0;
         while (it.hasNext()) {
            //Prepare the values to show
-           xVals.add(j,it.next().toString());
+           xVals.add(it.next().toString());
            String s = it.next();
            yvalues.add(new PieEntry(arrayOfValues[j]));
            j++;
@@ -99,6 +100,22 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         data.setValueTextSize(13f);
         data.setValueTextColor(Color.DKGRAY);
         pieChart.setOnChartValueSelectedListener(this);
+
+        List<LegendEntry> entries = new ArrayList<>();
+
+        for (int i = 0; i < xVals.size(); i++) {
+            LegendEntry entry = new LegendEntry();
+            //entry.formColor = colorList.get(i);
+            entry.label = xVals.get(i);
+            entries.add(entry);
+        }
+
+        Legend l = pieChart.getLegend();
+        l.setEnabled(true);
+        l.setCustom(entries);
+
+        pieChart.setEntryLabelColor(Color.WHITE);
+        pieChart.setEntryLabelTextSize(12f);
 
         // adding legends to the desigred positions
         /*
