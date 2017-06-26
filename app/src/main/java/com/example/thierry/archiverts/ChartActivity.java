@@ -35,6 +35,8 @@ import static com.github.mikephil.charting.utils.ColorTemplate.*;
 
 public class ChartActivity extends MainActivity implements OnChartValueSelectedListener {
 
+    private String searchString = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,8 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         ArrayList<String> facette_for_pie = new ArrayList<String>();
         Intent ident = getIntent();
         facette_for_pie = ident.getStringArrayListExtra("facette_for_pie");
+        // Get searchString
+        searchString = ident.getStringExtra("searchString");
 
         PieChart pieChart = (PieChart) findViewById(R.id.piechart);
         pieChart.setUsePercentValues(true);
@@ -81,9 +85,10 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         for (j= 0; j < arrayOfValues.length;  j++){
            //Prepare the values to show
            if (arrayOfValues[j] > (total*(pourcent/100))) { //Filter the value less than x% of the total
-                xVals.add(it.next().toString());
-                it.next();
-                yvalues.add(new PieEntry(arrayOfValues[j]));
+               String prog = it.next().toString();
+                xVals.add(prog);
+                String percent = it.next().toString();
+                yvalues.add(new PieEntry(arrayOfValues[j], prog));
            }
            else{ // value less than x% of the total
                filtered_value = filtered_value + arrayOfValues[j];
@@ -158,23 +163,19 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         pieChart.animateXY(1400, 1400);
     }
 
-    //@Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-
-        if (e == null)
-            return;
-        Log.i("VAL SELECTED",
-                "Value: " + e.getY() + ", xIndex: " + e.getX()
-                        + ", DataSet index: " + dataSetIndex);
-    }
-
-    @Override
     public void onValueSelected(Entry entry, Highlight highlight) {
 
         if (entry == null)
             return;
-        Log.i("VAL SELECTED",
-                "Value: " + entry.getY() + ", xIndex: " + entry.getX());
+        PieEntry pe = (PieEntry) entry;
+        Log.i("VAL SELECTED entry",
+                "Value: " + entry.getY() + ", xIndex: " + entry.getX() + ", label: " + pe.getLabel());
+        // Return to main activity and filter a new search
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("keyword", searchString);
+        resultIntent.putExtra("program", pe.getLabel());
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 
     //@Override
