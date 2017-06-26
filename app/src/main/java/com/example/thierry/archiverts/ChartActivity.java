@@ -58,6 +58,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         String[] stringArray = facette_for_pie.toArray(new String[facette_for_pie.size()]);
 
         int[] arrayOfValues = new int[facette_for_pie.size()/2];
+        int total = 0;
         // Extract the number of articles by program
         for(int i = 0;i < stringArray.length/2;i++)
         {
@@ -65,6 +66,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
             {
                 //Structure of stringArray
                 arrayOfValues[i] = Integer.parseInt(stringArray[i*2+1]);
+                total = total + arrayOfValues[i]; //total of the values
             }
             catch(Exception e)
             {
@@ -73,15 +75,26 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         }
 
         Iterator<String> it = facette_for_pie.iterator();
-        int j = 0;
-        while (it.hasNext()) {
+        int j = 0, filtered_value = 0;
+        double pourcent = 3;
+        //while (it.hasNext()) {
+        for (j= 0; j < arrayOfValues.length;  j++){
            //Prepare the values to show
-           xVals.add(it.next().toString());
-           String s = it.next();
-           yvalues.add(new PieEntry(arrayOfValues[j]));
-           j++;
+           if (arrayOfValues[j] > (total*(pourcent/100))) { //Filter the value less than x% of the total
+                xVals.add(it.next().toString());
+                it.next();
+                yvalues.add(new PieEntry(arrayOfValues[j]));
+           }
+           else{ // value less than x% of the total
+               filtered_value = filtered_value + arrayOfValues[j];
+               it.next(); //jump the value and program name
+               it.next();
+            }
         }
-
+        if(filtered_value > 0) {
+            xVals.add("Other"); //other is the addition of the filtered values
+            yvalues.add(new PieEntry(filtered_value));
+        }
         //Set the legend
         PieDataSet dataSet = new PieDataSet(yvalues, "Emissions");
         PieData data = new PieData(dataSet);
@@ -118,17 +131,17 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         pieChart.setEntryLabelTextSize(12f);
 
         // adding legends to the desigred positions
-        /*
-        Legend l = pieChart.getLegend();
-        l.setTextSize(14f);
+
+        //Legend l = pieChart.getLegend();
+        /*l.setTextSize(14f);
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         l.setDrawInside(false);
         l.setTextColor(Color.BLACK);
-        l.setEnabled(true);
-        */
-       /* Legend l = pieChart.getLegend();
+        l.setEnabled(true);*/
+
+        //Legend l = pieChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
@@ -140,7 +153,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         // entry label styling
         pieChart.setEntryLabelColor(Color.WHITE);
         //pieChart.setEntryLabelTypeface(mTfRegular);
-        pieChart.setEntryLabelTextSize(12f);*/
+        pieChart.setEntryLabelTextSize(12f);
 
         pieChart.animateXY(1400, 1400);
     }
