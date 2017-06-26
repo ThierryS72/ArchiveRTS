@@ -113,10 +113,8 @@ public class MainActivity extends AppCompatActivity
         BtnGetPieChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-
-
-
                 Intent intent = new Intent(MainActivity.this, ChartActivity.class);
+                intent.putExtra("facette_for_pie", facettes);
                 startActivity(intent);
             }
         });
@@ -191,6 +189,7 @@ public class MainActivity extends AppCompatActivity
             Log.i("return intent",res);
             articles = Tools.responseApiJSONtoListArticles(res);
             facettes = Tools.responseApiJSONtoListFacettes(res);
+
             mListView = (ListView) findViewById(R.id.listView);
             adapter = new ArticleAdapter(this, articles);
             mListView.setAdapter(adapter);
