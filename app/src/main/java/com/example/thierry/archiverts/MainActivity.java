@@ -12,7 +12,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ImageView;
@@ -53,11 +57,11 @@ import java.util.List;
 import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PieFragment.OnFragmentInteractionListener {
 
     private ListView mListView;
     private List<Article> articles = resetArticles();
-    private Array facettes;
+    private String[] facettes;
 
     ArticleAdapter adapter;
 
@@ -89,17 +93,17 @@ public class MainActivity extends AppCompatActivity
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });*/
-/*
+        });
+        /*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-*/
+        */
         final Button BtnGetServerData = (Button) findViewById(R.id.GetServerData);
         final Context c = this.getApplicationContext();
 
@@ -108,6 +112,9 @@ public class MainActivity extends AppCompatActivity
         BtnGetPieChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+
+
+
                 Intent intent = new Intent(MainActivity.this, ChartActivity.class);
                 startActivity(intent);
             }
@@ -179,6 +186,7 @@ public class MainActivity extends AppCompatActivity
         // 200 means activity articleDetail
         if (requestCode == 200 && resultCode == RESULT_OK && data != null) {
             String res = data.getStringExtra("response");
+            //String res2 = data.getStringExtra("facetCounts");
             Log.i("return intent",res);
             articles = Tools.responseApiJSONtoListArticles(res);
             facettes = Tools.responseApiJSONtoListFacettes(res);
@@ -186,6 +194,11 @@ public class MainActivity extends AppCompatActivity
             adapter = new ArticleAdapter(this, articles);
             mListView.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(String data) {
+        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
     }
 
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
@@ -260,110 +273,49 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
+         /*   Toast.makeText(this, "Camera", Toast.LENGTH_LONG).show();
+            PieFragment pieFragment = new PieFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    pieFragment,
+                    pieFragment.getTag()
+            ).commit();*/
+        }
+        else if (id == R.id.nav_gallery) {
+            //Toast.makeText(this, "Gallery", Toast.LENGTH_LONG).show();
+            PieFragment pieFragment = PieFragment.newInstance(5,"some2");
+            /*
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    pieFragment,
+                    pieFragment.getTag()
+            ).commit();*/
+        }
+        /*else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        }*/
+        else if (id == R.id.nav_share) {
+            //Toast.makeText(this, "Share", Toast.LENGTH_LONG).show();
+            PieFragment pieFragment = PieFragment.newInstance(5, "data2");
+            android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+            /*
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    pieFragment,
+                    pieFragment.getTag()
+            ).commit();
+            */
         }
+        /*else if (id == R.id.nav_send) {
+
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            if(getArguments().getInt(ARG_SECTION_NUMBER)==1)
-            {
-                View rootView = inflater.inflate(R.layout.fragment_pie_chart, container, false);
-                //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-                //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-                return rootView;
-            }
-            else if(getArguments().getInt(ARG_SECTION_NUMBER)==2)
-            {
-                View rootView = inflater.inflate(R.layout.fragment_pie_chart, container, false);
-                //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-                //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-                return rootView;
-            }
-            else {
-                View rootView = inflater.inflate(R.layout.fragment_pie_chart, container, false);
-                //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-                //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-                return rootView;
-
-            }
-        }
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Page 1";
-                case 1:
-                    return "Page 2";
-                case 2:
-                    return "Page 3";
-            }
-            return null;
-        }
     }
 }

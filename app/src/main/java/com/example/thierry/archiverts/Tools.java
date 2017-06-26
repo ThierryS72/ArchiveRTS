@@ -123,10 +123,10 @@ public final class Tools extends Activity {
     }
 
     // parse the JSON repsonse of API to create ArrayList Facette
-    public static Array responseApiJSONtoListFacettes(String response)
+    public static String[] responseApiJSONtoListFacettes(String response)
     {
         // Reset listFacettes
-        Array facettes;
+        String facettes[] = new String[]{};
 
         /****************** Start Parse Response JSON Data *************/
         String OutputData = "";
@@ -135,13 +135,14 @@ public final class Tools extends Activity {
         try {
 
             JSONObject json = (JSONObject) new JSONTokener(response).nextValue();
-            //JSONObject json1 = json.getJSONObject("facetCounts");
-            JSONObject json2 = json.getJSONObject("program");
+            JSONObject json1 = json.getJSONObject("facetCounts");
+            JSONObject json2 = json1.getJSONObject("enumerates");
+            JSONObject json3 = json2.getJSONObject("mediaType");
+            JSONObject json4 = json3.getJSONObject("program");
 
-
-            Iterator<String> itr = json2.keys();
+            Iterator<String> itr = json4.keys();
             int i=0;
-            String[] values = new String[json2.length()];
+            String[] values = new String[json4.length()];
 
             // Convert array to list
             List<String> listFromArray = Arrays.asList(values);
@@ -149,14 +150,12 @@ public final class Tools extends Activity {
             List<String> tempList = new ArrayList<String>(listFromArray);
 
             while(itr.hasNext()){
-                values[i++] = json2.getString((String)itr.next());
+                values[i++] = json4.getString((String)itr.next());
                 tempList.add(values[i++]);
-                //cettes.add(new Facette(json2.getString((String)itr.next()));
             }
             //Convert list back to array
             String[] tempArray = new String[tempList.size()];
             facettes = tempList.toArray(tempArray);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

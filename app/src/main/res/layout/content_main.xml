@@ -7,44 +7,68 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.thierry.archiverts.MainActivity"
     tools:showIn="@layout/app_bar_main">
+
+    <!--<LinearLayout-->
     <LinearLayout
+        android:id="@+id/relativelayout_for_fragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
         android:orientation="vertical"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
 
+        <!--<android.support.v4.view.ViewPager
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
         <EditText
             android:id="@+id/searchString"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingTop="20px"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text=""
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:inputType="text"
             android:maxLines="1"
+            android:paddingTop="20px"
+            android:text=""
             tools:layout_editor_absoluteY="6dp" />
 
         <Button
-        android:id="@+id/GetServerData"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_gravity="center_horizontal"
-        android:clickable="true"
-        android:cursorVisible="true"
-        android:paddingTop="10px"
-        android:text="Rechercher"
-        android:visibility="visible"
-        android:imeOptions="actionDone"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="55dp" />
+            android:id="@+id/GetServerData"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:cursorVisible="true"
+            android:imeOptions="actionDone"
+            android:paddingTop="10px"
+            android:text="Rechercher"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="28dp"
+            tools:layout_editor_absoluteY="55dp" />
+
+        <Button
+            android:id="@+id/GetPieChart"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:cursorVisible="true"
+            android:imeOptions="actionDone"
+            android:paddingTop="10px"
+            android:text="Montrer"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="28dp"
+            tools:layout_editor_absoluteY="55dp" />
 
         <TextView
             android:id="@+id/output"
@@ -62,18 +86,13 @@
 
         <TextView
 
-        android:paddingTop="16px"
-        android:id="@+id/jsonParsed"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Parsed JSON."
-        tools:layout_editor_absoluteY="320dp"
-        tools:layout_editor_absoluteX="45dp" />
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/piechart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:id="@+id/jsonParsed"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16px"
+            android:text="Parsed JSON."
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="320dp" />
 
     </LinearLayout>
 
