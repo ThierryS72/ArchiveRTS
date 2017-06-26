@@ -113,9 +113,12 @@ public class MainActivity extends AppCompatActivity
         BtnGetPieChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                EditText searchString = (EditText) findViewById(R.id.searchString);
+                searchStringQuery = searchString.getText().toString();
                 Intent intent = new Intent(MainActivity.this, ChartActivity.class);
+                intent.putExtra("searchString", searchStringQuery);
                 intent.putExtra("facette_for_pie", facettes);
-                startActivity(intent);
+                startActivityForResult(intent, 300);
             }
         });
 
@@ -170,7 +173,7 @@ public class MainActivity extends AppCompatActivity
             String program = data.getStringExtra("program");
             // Start a new search for this emission
             Intent myIntent = new Intent(mListView.getContext(), ApiActivity.class);
-            myIntent.putExtra("searchString", "program:"+program+" AND "+keyword);
+            myIntent.putExtra("searchString", "program:\""+program+"\" AND "+keyword);
             myIntent.putExtra("sort", "-score%2C-isDuplicate%2C-publicationDate");
             myIntent.putExtra("enumFacets", "mediaType,program");
             myIntent.putExtra("nbRows", 25);
@@ -182,7 +185,7 @@ public class MainActivity extends AppCompatActivity
                 e.getMessage();
             }
         }
-        // 200 means activity articleDetail
+        // 200 means activity add filter program
         if (requestCode == 200 && resultCode == RESULT_OK && data != null) {
             String res = data.getStringExtra("response");
             //String res2 = data.getStringExtra("facetCounts");
@@ -193,6 +196,25 @@ public class MainActivity extends AppCompatActivity
             mListView = (ListView) findViewById(R.id.listView);
             adapter = new ArticleAdapter(this, articles);
             mListView.setAdapter(adapter);
+        }
+
+        // 300 means activity chartPie
+        if (requestCode == 300 && resultCode == RESULT_OK && data != null) {
+            String keyword = data.getStringExtra("keyword");
+            String program = data.getStringExtra("program");
+            // Start a new search for this emission
+            Intent myIntent = new Intent(mListView.getContext(), ApiActivity.class);
+            myIntent.putExtra("searchString", "program:\""+program+"\" AND "+keyword);
+            myIntent.putExtra("sort", "-score%2C-isDuplicate%2C-publicationDate");
+            myIntent.putExtra("enumFacets", "mediaType,program");
+            myIntent.putExtra("nbRows", 25);
+            myIntent.putExtra("start", 0);
+            try {
+                startActivityForResult(myIntent, 200); // 200 is used for responseCode
+            }catch (Exception e)
+            {
+                e.getMessage();
+            }
         }
     }
 
