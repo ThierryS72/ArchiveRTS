@@ -41,7 +41,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
 
         setContentView(R.layout.pie_chart);
 
-        // Get the facette
+        // Get the facette from MainActivity
         ArrayList<String> facette_for_pie = new ArrayList<String>();
         Intent ident = getIntent();
         facette_for_pie = ident.getStringArrayListExtra("facette_for_pie");
@@ -51,7 +51,6 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         // IMPORTANT: In a PieChart, no values (Entry) should have the same
         // xIndex (even if from different DataSets), since no values can be
         // drawn above each other.
-        //ArrayList<Entry> yvalues = new ArrayList<Entry>();
         ArrayList<PieEntry> yvalues = new ArrayList<PieEntry>();
         ArrayList<String> xVals = new ArrayList<String>();
 
@@ -66,7 +65,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
             {
                 //Structure of stringArray
                 arrayOfValues[i] = Integer.parseInt(stringArray[i*2+1]);
-                total = total + arrayOfValues[i]; //total of the values
+                total = total + arrayOfValues[i]; //Sum of the values
             }
             catch(Exception e)
             {
@@ -76,14 +75,16 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
 
         Iterator<String> it = facette_for_pie.iterator();
         int j = 0, filtered_value = 0;
+
         double pourcent = 3;
-        //while (it.hasNext()) {
+
         for (j= 0; j < arrayOfValues.length;  j++){
            //Prepare the values to show
            if (arrayOfValues[j] > (total*(pourcent/100))) { //Filter the value less than x% of the total
-                xVals.add(it.next().toString());
-                it.next();
-                yvalues.add(new PieEntry(arrayOfValues[j]));
+               String prog = it.next().toString();
+               xVals.add(prog);
+               String percent = it.next().toString();
+               yvalues.add(new PieEntry(arrayOfValues[j], prog));
            }
            else{ // value less than x% of the total
                filtered_value = filtered_value + arrayOfValues[j];
@@ -95,6 +96,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
             xVals.add("Other"); //other is the addition of the filtered values
             yvalues.add(new PieEntry(filtered_value));
         }
+
         //Set the legend
         PieDataSet dataSet = new PieDataSet(yvalues, "Emissions");
         PieData data = new PieData(dataSet);
@@ -114,45 +116,18 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         data.setValueTextColor(Color.DKGRAY);
         pieChart.setOnChartValueSelectedListener(this);
 
-        List<LegendEntry> entries = new ArrayList<>();
-
-        for (int i = 0; i < xVals.size(); i++) {
-            LegendEntry entry = new LegendEntry();
-            //entry.formColor = colorList.get(i);
-            entry.label = xVals.get(i);
-            entries.add(entry);
-        }
-
         Legend l = pieChart.getLegend();
-        l.setEnabled(true);
-        l.setCustom(entries);
-
-        pieChart.setEntryLabelColor(Color.WHITE);
-        pieChart.setEntryLabelTextSize(12f);
-
-        // adding legends to the desigred positions
-
-        //Legend l = pieChart.getLegend();
-        /*l.setTextSize(14f);
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setTextColor(Color.BLACK);
-        l.setEnabled(true);*/
-
-        //Legend l = pieChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        l.setOrientation(Legend.LegendOrientation.VERTICAL);
-        l.setDrawInside(false);
-        l.setXEntrySpace(7f);
-        l.setYEntrySpace(0f);
-        l.setYOffset(0f);
+        l.setEnabled(false);
 
         // entry label styling
-        pieChart.setEntryLabelColor(Color.WHITE);
-        //pieChart.setEntryLabelTypeface(mTfRegular);
+        data.setValueTextColor(Color.BLACK);
+        dataSet.setValueLinePart1OffsetPercentage(90.f);
+        dataSet.setValueLinePart1Length(1f);
+        dataSet.setValueLinePart2Length(.1f);
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setEntryLabelTextSize(12f);
 
         pieChart.animateXY(1400, 1400);
