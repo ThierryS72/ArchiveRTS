@@ -138,7 +138,7 @@ public final class Tools extends Activity {
             JSONObject json1 = json.getJSONObject("facetCounts");
             JSONObject json2 = json1.getJSONObject("enumerates");
             JSONObject json3 = json2.getJSONObject("mediaType");
-            JSONObject json4 = json3.getJSONObject("program");
+            JSONObject json4 = json2.getJSONObject("program");
 
             Iterator<String> itr = json4.keys();
             int i=0;
