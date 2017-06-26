@@ -3,6 +3,7 @@ package com.example.thierry.archiverts;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -86,7 +87,7 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         for (j= 0; j < arrayOfValues.length;  j++){
            //Prepare the values to show
            if (arrayOfValues[j] > (total*(pourcent/100))) { //Filter the value less than x% of the total
-               String prog = it.next().toString();
+                String prog = it.next().toString();
                 xVals.add(prog);
                 String percent = it.next().toString();
                 yvalues.add(new PieEntry(arrayOfValues[j], prog));
@@ -98,8 +99,9 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
             }
         }
         if(filtered_value > 0) {
-            xVals.add("Other"); //other is the addition of the filtered values
-            yvalues.add(new PieEntry(filtered_value));
+            String prog = "Other";
+            xVals.add(prog); //other is the addition of the filtered values
+            yvalues.add(new PieEntry(filtered_value, prog));
         }
         //Set the legend
         PieDataSet dataSet = new PieDataSet(yvalues, "Emissions");
@@ -125,16 +127,19 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
 
         // entry label styling
         data.setValueTextColor(Color.BLACK);
-        dataSet.setValueLinePart1OffsetPercentage(90.f);
+        dataSet.setValueLinePart1OffsetPercentage(80.f);
         dataSet.setValueLinePart1Length(1f);
         dataSet.setValueLinePart2Length(.1f);
         dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.INSIDE_SLICE);
 
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setEntryLabelTextSize(12f);
 
-        pieChart.animateXY(1400, 1400);
+        // undo all highlights
+        pieChart.highlightValues(null);
+
+        pieChart.animateXY(1900, 1900); //1400
     }
 
     public void onValueSelected(Entry entry, Highlight highlight) {
