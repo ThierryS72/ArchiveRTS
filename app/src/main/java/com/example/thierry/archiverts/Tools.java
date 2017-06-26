@@ -123,10 +123,11 @@ public final class Tools extends Activity {
     }
 
     // parse the JSON repsonse of API to create ArrayList Facette
-    public static String[] responseApiJSONtoListFacettes(String response)
+    public static ArrayList<String> responseApiJSONtoListFacettes(String response)
     {
         // Reset listFacettes
-        String facettes[] = new String[]{};
+        //String facettes[] = new String[]{};
+        ArrayList<String> facettes=new ArrayList<String>();
 
         /****************** Start Parse Response JSON Data *************/
         String OutputData = "";
@@ -140,22 +141,13 @@ public final class Tools extends Activity {
             JSONObject json3 = json2.getJSONObject("mediaType");
             JSONObject json4 = json2.getJSONObject("program");
 
-            Iterator<String> itr = json4.keys();
-            int i=0;
-            String[] values = new String[json4.length()];
-
-            // Convert array to list
-            List<String> listFromArray = Arrays.asList(values);
-            // Create new list, because, List to Array always returns a fixed-size list backed by the specified array.
-            List<String> tempList = new ArrayList<String>(listFromArray);
-
-            while(itr.hasNext()){
-                values[i++] = json4.getString((String)itr.next());
-                tempList.add(values[i++]);
+            //JSONObject obj=new JSONObject(response);
+            Iterator iter = json4.keys();
+            while(iter.hasNext()) {
+                String key = (String) iter.next();
+                facettes.add(key);
+                facettes.add(json4.getString(key));
             }
-            //Convert list back to array
-            String[] tempArray = new String[tempList.size()];
-            facettes = tempList.toArray(tempArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }

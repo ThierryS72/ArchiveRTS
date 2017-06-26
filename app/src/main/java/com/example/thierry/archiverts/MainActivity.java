@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity
 
     private ListView mListView;
     private List<Article> articles = resetArticles();
-    private String[] facettes;
+    //private String[] facettes;
+    private ArrayList<String> facettes=new ArrayList<String>();
 
     ArticleAdapter adapter;
 
