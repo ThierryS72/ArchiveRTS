@@ -117,7 +117,27 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         pieChart.setTransparentCircleRadius(25f);
         pieChart.setHoleRadius(25f);
 
-        dataSet.setColors(VORDIPLOM_COLORS);
+        // add many colors
+        ArrayList<Integer> colors = new ArrayList<Integer>();
+
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.PASTEL_COLORS)
+            colors.add(c);
+
+        colors.add(ColorTemplate.getHoloBlue());
+        dataSet.setColors(colors);
+
         data.setValueTextSize(13f);
         data.setValueTextColor(Color.DKGRAY);
         pieChart.setOnChartValueSelectedListener(this);
