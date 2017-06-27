@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity
         final Context c = this.getApplicationContext();
 
         final Button BtnGetPieChart = (Button) findViewById(R.id.GetPieChart);
+        // Hide the Pie button when no results
+        BtnGetPieChart.setVisibility(View.GONE);
 
         BtnGetPieChart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,6 +198,9 @@ public class MainActivity extends AppCompatActivity
             mListView = (ListView) findViewById(R.id.listView);
             adapter = new ArticleAdapter(this, articles);
             mListView.setAdapter(adapter);
+            // Show Pie button
+            Button BtnGetPieChart = (Button) findViewById(R.id.GetPieChart);
+            BtnGetPieChart.setVisibility(View.VISIBLE);
         }
 
         // 300 means activity chartPie

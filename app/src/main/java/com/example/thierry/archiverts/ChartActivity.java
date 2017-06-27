@@ -142,10 +142,12 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         pieChart.animateXY(1900, 1900); //1400
     }
 
+    // When click on a slice
     public void onValueSelected(Entry entry, Highlight highlight) {
 
         if (entry == null)
             return;
+        // Cast in PieEntry -> so we can use getLabel()
         PieEntry pe = (PieEntry) entry;
         Log.i("VAL SELECTED entry",
                 "Value: " + entry.getY() + ", xIndex: " + entry.getX() + ", label: " + pe.getLabel());
@@ -154,6 +156,14 @@ public class ChartActivity extends MainActivity implements OnChartValueSelectedL
         resultIntent.putExtra("keyword", searchString);
         resultIntent.putExtra("program", pe.getLabel());
         setResult(Activity.RESULT_OK, resultIntent);
+        // finish activity
+        finish();
+    }
+
+    // When use back button - finish the activity but no new search
+    @Override
+    public void onBackPressed()
+    {
         finish();
     }
 
