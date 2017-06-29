@@ -60,7 +60,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
 
         // Display picture
         new DownloadImageFromInternet((ImageView) findViewById(R.id.imageArticle))
-                .execute(a.getImageUrl());
+                .execute(a.getImageUrl()+"?w=732&h=409");
         Log.i("Image",a.getImageUrl());
 
         // If there isn't a picture, hide the empty space with GONE

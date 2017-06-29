@@ -55,7 +55,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 
         if (article.getImageURL() != "") {
             viewHolder.imageArticle.setVisibility(View.VISIBLE);
-            new ImageDownloaderTask(viewHolder.imageArticle).execute(article.getImageURL());
+            new ImageDownloaderTask(viewHolder.imageArticle).execute(article.getImageURL()+"?w=100&h=100");
         }
         else  // If there isn't a picture, hide the empty space with GONE
         {
